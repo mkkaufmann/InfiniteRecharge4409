@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import frc.robot.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -20,14 +21,15 @@ import com.kauailabs.navx.frc.AHRS;
  */
 
 
-
 public class Robot extends TimedRobot {
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
 
-
+  DriveTrain driveTrain = new DriveTrain();
+  
+  
 
   @Override
   public void robotInit() {
