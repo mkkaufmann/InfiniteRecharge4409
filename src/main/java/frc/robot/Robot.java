@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.subsystems.*;
+import edu.wpi.first.wpilibj.Joystick;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,7 +29,8 @@ public class Robot extends TimedRobot {
    */
 
   DriveTrain driveTrain = new DriveTrain();
-  
+  Joystick leftJS = new Joystick(0);
+  Joystick rightJS = new Joystick(1);
   
 
   @Override
@@ -50,6 +52,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    driveTrain.drive(leftJS.getY(), rightJS.getY());
   }
 
   @Override
