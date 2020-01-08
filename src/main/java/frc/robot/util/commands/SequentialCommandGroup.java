@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.util;
+package frc.robot.util.commands;
 
 import java.util.ArrayList;
 import java.util.List;

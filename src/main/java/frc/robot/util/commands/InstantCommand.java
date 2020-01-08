@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.util;
+package frc.robot.util.commands;
 
 import static edu.wpi.first.wpilibj.util.ErrorMessages.requireNonNullParam;
 

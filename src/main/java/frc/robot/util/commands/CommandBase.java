@@ -1,4 +1,4 @@
-package frc.robot.util;
+package frc.robot.util.commands;
 
 import java.util.HashSet;
 import java.util.Set;

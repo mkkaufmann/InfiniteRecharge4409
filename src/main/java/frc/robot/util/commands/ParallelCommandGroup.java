@@ -5,60 +5,38 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.util;
+package frc.robot.util.commands;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A CommandGroup that runs a set of commands in parallel, ending only when a specific command
- * (the "deadline") ends, interrupting all other commands that are still running at that point.
+ * A CommandGroup that runs a set of commands in parallel, ending when the last command ends.
  *
  * <p>As a rule, CommandGroups require the union of the requirements of their component commands.
  */
-public class ParallelDeadlineGroup extends CommandGroupBase {
+public class ParallelCommandGroup extends CommandGroupBase {
   //maps commands in this group to whether they are still running
   private final Map<Command, Boolean> m_commands = new HashMap<>();
   private boolean m_runWhenDisabled = true;
-  private boolean m_finished = true;
-  private Command m_deadline;
 
   /**
-   * Creates a new ParallelDeadlineGroup.  The given commands (including the deadline) will be
-   * executed simultaneously.  The CommandGroup will finish when the deadline finishes,
-   * interrupting all other still-running commands.  If the CommandGroup is interrupted, only
-   * the commands still running will be interrupted.
+   * Creates a new ParallelCommandGroup.  The given commands will be executed simultaneously.
+   * The command group will finish when the last command finishes.  If the CommandGroup is
+   * interrupted, only the commands that are still running will be interrupted.
    *
-   * @param deadline the command that determines when the group ends
-   * @param commands the commands to be executed
+   * @param commands the commands to include in this group.
    */
-  public ParallelDeadlineGroup(Command deadline, Command... commands) {
-    m_deadline = deadline;
+  public ParallelCommandGroup(Command... commands) {
     addCommands(commands);
-    if (!m_commands.containsKey(deadline)) {
-      addCommands(deadline);
-    }
-  }
-
-  /**
-   * Sets the deadline to the given command.  The deadline is added to the group if it is not
-   * already contained.
-   *
-   * @param deadline the command that determines when the group ends
-   */
-  public void setDeadline(Command deadline) {
-    if (!m_commands.containsKey(deadline)) {
-      addCommands(deadline);
-    }
-    m_deadline = deadline;
   }
 
   @Override
   public final void addCommands(Command... commands) {
     requireUngrouped(commands);
 
-    if (!m_finished) {
+    if (m_commands.containsValue(true)) {
       throw new IllegalStateException(
           "Commands cannot be added to a CommandGroup while the group is running");
     }
@@ -82,7 +60,6 @@ public class ParallelDeadlineGroup extends CommandGroupBase {
       commandRunning.getKey().initialize();
       commandRunning.setValue(true);
     }
-    m_finished = false;
   }
 
   @Override
@@ -95,25 +72,24 @@ public class ParallelDeadlineGroup extends CommandGroupBase {
       if (commandRunning.getKey().isFinished()) {
         commandRunning.getKey().end(false);
         commandRunning.setValue(false);
-        if (commandRunning.getKey() == m_deadline) {
-          m_finished = true;
-        }
       }
     }
   }
 
   @Override
   public void end(boolean interrupted) {
-    for (Map.Entry<Command, Boolean> commandRunning : m_commands.entrySet()) {
-      if (commandRunning.getValue()) {
-        commandRunning.getKey().end(true);
+    if (interrupted) {
+      for (Map.Entry<Command, Boolean> commandRunning : m_commands.entrySet()) {
+        if (commandRunning.getValue()) {
+          commandRunning.getKey().end(true);
+        }
       }
     }
   }
 
   @Override
   public boolean isFinished() {
-    return m_finished;
+    return !m_commands.values().contains(true);
   }
 
   @Override

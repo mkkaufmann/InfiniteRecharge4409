@@ -1,4 +1,4 @@
-package frc.robot.util;
+package frc.robot.util.commands;
 /**
  * A robot subsystem.  Subsystems are the basic unit of robot organization in the Command-based
  * framework; they encapsulate low-level hardware objects (motor controllers, sensors, etc) and

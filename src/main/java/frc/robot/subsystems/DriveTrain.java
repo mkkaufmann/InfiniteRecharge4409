@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import frc.robot.util.NavX;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.controller.RamseteController;
+import frc.robot.util.commands.RamseteCommand;
 import frc.robot.Constants;
 
 public class DriveTrain {
@@ -23,10 +24,13 @@ public class DriveTrain {
     NavX navx = new NavX();
 
     //odometry, etc for autonomous
-    DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.Drivetrain.drivetrainWidth);
+    DifferentialDriveKinematics kinematics 
+	    = new DifferentialDriveKinematics(Constants.Drivetrain.drivetrainWidth);
     DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(new Rotation2d(), new Pose2d());
     RamseteController ramseteController = new RamseteController();
-
+    
+    //todo add encoders
+    //add pid
     public DriveTrain(){
         leftFront.configFactoryDefault();
         rightFront.configFactoryDefault();
@@ -41,6 +45,14 @@ public class DriveTrain {
     }
 
     public void driveTrajectory(Trajectory trajectory){
+	RamseteCommand command = new RamseteCommand(trajectory, odometry::getPoseMeters, ramseteController, kinematics, this::driveVelocityMetersPerSecond);
+	//make the command run
+    }
+
+    //make m/s 
+    private void driveVelocityMetersPerSecond(Double left, Double right){
+	leftFront.set(ControlMode.Velocity, left);
+	leftFront.set(ControlMode.Velocity, right);
     }
 
     public void updateOdometry(){
