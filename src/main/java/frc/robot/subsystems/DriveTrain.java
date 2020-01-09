@@ -11,21 +11,20 @@ import frc.robot.util.NavX;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import frc.robot.util.commands.RamseteCommand;
-import frc.robot.Constants;
 
 public class DriveTrain {
     //motors
-    TalonSRX leftFront = new TalonSRX(Constants.Drivetrain.leftFrontPort);        
-    TalonSRX rightFront = new TalonSRX(Constants.Drivetrain.rightFrontPort);
-    VictorSPX leftRear = new VictorSPX(Constants.Drivetrain.leftRearPort);
-    VictorSPX rightRear = new VictorSPX(Constants.Drivetrain.rightRearPort);
+    TalonSRX leftFront = new TalonSRX(0);        
+    TalonSRX rightFront = new TalonSRX(1);
+    VictorSPX leftRear = new VictorSPX(2);
+    VictorSPX rightRear = new VictorSPX(3);
 
     //sensors
     NavX navx = new NavX();
 
     //odometry, etc for autonomous
     DifferentialDriveKinematics kinematics 
-	    = new DifferentialDriveKinematics(Constants.Drivetrain.drivetrainWidth);
+	    = new DifferentialDriveKinematics(1.0);
     DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(new Rotation2d(), new Pose2d());
     RamseteController ramseteController = new RamseteController();
     
