@@ -23,8 +23,7 @@ public class DriveTrain {
     NavX navx = new NavX();
 
     //odometry, etc for autonomous
-    DifferentialDriveKinematics kinematics 
-	    = new DifferentialDriveKinematics(1.0);
+    DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(1.0);
     DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(new Rotation2d(), new Pose2d());
     RamseteController ramseteController = new RamseteController();
     
@@ -50,8 +49,8 @@ public class DriveTrain {
 
     //make m/s 
     private void driveVelocityMetersPerSecond(Double left, Double right){
-	leftFront.set(ControlMode.Velocity, left);
-	leftFront.set(ControlMode.Velocity, right);
+	    leftFront.set(ControlMode.Velocity, left);
+	    rightFront.set(ControlMode.Velocity, right);
     }
 
     public void updateOdometry(){
