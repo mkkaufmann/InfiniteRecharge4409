@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.util.commands.CommandScheduler;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -42,6 +43,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+	  CommandScheduler.getInstance().run();
   }
 
   @Override
