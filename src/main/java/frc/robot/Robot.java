@@ -52,6 +52,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+	  CommandScheduler.getInstance().run();
     driveTrain.drive(leftJS.getY(), rightJS.getY());
   }
 
