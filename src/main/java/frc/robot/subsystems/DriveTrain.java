@@ -17,7 +17,7 @@ public class DriveTrain {
 
     //constants
     static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
-    static final double WHEEL_DIAMETER_INCHES = 6;
+    static final double WHEEL_DIAMETER_INCHES = 6.0;
 
     //motors
     TalonSRX leftMaster = new TalonSRX(0);        
@@ -69,10 +69,26 @@ public class DriveTrain {
     }
 
     private double encoderTicksToRevolutions(int ticks){
-        return 0;
+        return ticks / ENCODER_TICKS_PER_REVOLUTION;
+    }
+
+    private double revolutionsToInches(double revolutions){
+        return revolutions * Math.PI * WHEEL_DIAMETER_INCHES;
     }
 
     private double encoderTicksToInches(int ticks){
-        return 0;
+        return revolutionsToInches(encoderTicksToRevolutions(ticks));
+    }
+
+    private double inchesToRevolutions(double inches){
+	return inches / (Math.PI * WHEEL_DIAMETER_INCHES);
+    }
+    
+    private double revolutionsToTicks(double revolutions){
+	return revolutions * ENCODER_TICKS_PER_REVOLUTION;
+    }
+
+    private double inchesToTicks(double inches){
+	return revolutionsToTicks(inchesToRevolutions(inches)); 
     }
 }
