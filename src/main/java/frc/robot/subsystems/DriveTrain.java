@@ -18,6 +18,7 @@ public class DriveTrain {
     //constants
     static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
     static final double WHEEL_DIAMETER_INCHES = 6.0;
+    static final double INCHES_PER_METER = 39.37;
 
     //motors
     TalonSRX leftMaster = new TalonSRX(0);        
@@ -57,10 +58,9 @@ public class DriveTrain {
 	command.schedule();
     }
 
-    //make m/s 
     private void driveVelocityMetersPerSecond(Double left, Double right){
-	    leftMaster.set(ControlMode.Velocity, left);
-	    rightMaster.set(ControlMode.Velocity, right);
+	    leftMaster.set(ControlMode.Velocity, inchesToTicks(left * INCHES_PER_METER));
+	    rightMaster.set(ControlMode.Velocity, inchesToTicks(right * INCHES_PER_METER));
     }
 
     public void updateOdometry(){
