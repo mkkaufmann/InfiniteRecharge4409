@@ -9,7 +9,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import frc.robot.util.commands.CommandScheduler;
 
 /**
@@ -28,9 +30,7 @@ public class Robot extends TimedRobot {
    */
 
   DriveTrain driveTrain = new DriveTrain();
-  Joystick leftJS = new Joystick(0);
-  Joystick rightJS = new Joystick(1);
-  
+  XboxController controller = new XboxController(0); 
 
   @Override
   public void robotInit() {
@@ -48,12 +48,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+//	  Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0,0,0), {}, new Pose2d(1,0,0), new TrajectoryConfig(0,0,0));
+//	  driveTrain.driveTrajectory(trajectory);
   }
 
   @Override
   public void teleopPeriodic() {
 	  CommandScheduler.getInstance().run();
-    driveTrain.drive(leftJS.getY(), rightJS.getY());
+    
   }
 
   @Override

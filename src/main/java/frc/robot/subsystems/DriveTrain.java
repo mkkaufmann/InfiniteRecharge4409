@@ -21,10 +21,10 @@ public class DriveTrain {
     static final double INCHES_PER_METER = 39.37;
 
     //motors
-    TalonSRX leftMaster = new TalonSRX(0);        
+    TalonSRX leftMaster = new TalonSRX(3);        
     TalonSRX rightMaster = new TalonSRX(1);
-    VictorSPX leftSlave = new VictorSPX(2);
-    VictorSPX rightSlave = new VictorSPX(3);
+    VictorSPX leftSlave = new VictorSPX(4);
+    VictorSPX rightSlave = new VictorSPX(0);
 
     //sensors
     NavX navx = new NavX();
@@ -43,6 +43,15 @@ public class DriveTrain {
 	//one encoder may be backwards
 	leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
 	rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
+
+        leftMaster.config_kP(0,0.2);
+        rightMaster.config_kP(0,0.2);
+        leftMaster.config_kI(0,0);
+        rightMaster.config_kI(0,0);
+        leftMaster.config_kD(0,0);
+        rightMaster.config_kD(0,0);
+        leftMaster.config_kF(0,0.4625);
+        rightMaster.config_kF(0,0.4625);
 
         leftSlave.follow(leftMaster);
         rightSlave.follow(rightMaster);
@@ -65,7 +74,11 @@ public class DriveTrain {
 
     public void updateOdometry(){
 	//todo: add encoder values here
-       	odometry.update(new Rotation2d(navx.getYawRadians()), 0, 0);
+       	odometry.update(
+			new Rotation2d(navx.getYawRadians()), 
+			encoderTicksToInches(leftMaster.getSelectedSensorPosition())/INCHES_PER_METER, 
+			encoderTicksToInches(rightMaster.getSelectedSensorPosition())/INCHES_PER_METER
+			);
     }
 
     private double encoderTicksToRevolutions(int ticks){
