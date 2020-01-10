@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -13,6 +14,11 @@ import edu.wpi.first.wpilibj.controller.RamseteController;
 import frc.robot.util.commands.RamseteCommand;
 
 public class DriveTrain {
+
+    //constants
+    static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
+    static final double WHEEL_DIAMETER_INCHES = 6;
+
     //motors
     TalonSRX leftMaster = new TalonSRX(0);        
     TalonSRX rightMaster = new TalonSRX(1);
@@ -32,6 +38,10 @@ public class DriveTrain {
     public DriveTrain(){
         leftMaster.configFactoryDefault();
         rightMaster.configFactoryDefault();
+
+	//one encoder may be backwards
+	leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
+	rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
 
         leftSlave.follow(leftMaster);
         rightSlave.follow(rightMaster);
@@ -58,4 +68,11 @@ public class DriveTrain {
        	odometry.update(new Rotation2d(navx.getYawRadians()), 0, 0);
     }
 
+    private double encoderTicksToRevolutions(int ticks){
+        return 0;
+    }
+
+    private double encoderTicksToInches(int ticks){
+        return 0;
+    }
 }
