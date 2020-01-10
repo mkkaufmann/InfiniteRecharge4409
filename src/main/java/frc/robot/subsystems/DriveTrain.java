@@ -14,10 +14,10 @@ import frc.robot.util.commands.RamseteCommand;
 
 public class DriveTrain {
     //motors
-    TalonSRX leftFront = new TalonSRX(0);        
-    TalonSRX rightFront = new TalonSRX(1);
-    VictorSPX leftRear = new VictorSPX(2);
-    VictorSPX rightRear = new VictorSPX(3);
+    TalonSRX leftMaster = new TalonSRX(0);        
+    TalonSRX rightMaster = new TalonSRX(1);
+    VictorSPX leftSlave = new VictorSPX(2);
+    VictorSPX rightSlave = new VictorSPX(3);
 
     //sensors
     NavX navx = new NavX();
@@ -30,27 +30,27 @@ public class DriveTrain {
     //todo add encoders
     //add pid
     public DriveTrain(){
-        leftFront.configFactoryDefault();
-        rightFront.configFactoryDefault();
+        leftMaster.configFactoryDefault();
+        rightMaster.configFactoryDefault();
 
-        leftRear.follow(leftFront);
-        rightRear.follow(rightFront);
+        leftSlave.follow(leftMaster);
+        rightSlave.follow(rightMaster);
     }
 
     public void drive(double left, double right){
-        leftFront.set(ControlMode.PercentOutput, left);
-        rightFront.set(ControlMode.PercentOutput, right);
+        leftMaster.set(ControlMode.PercentOutput, left);
+        rightMaster.set(ControlMode.PercentOutput, right);
     }
 
     public void driveTrajectory(Trajectory trajectory){
 	RamseteCommand command = new RamseteCommand(trajectory, odometry::getPoseMeters, ramseteController, kinematics, this::driveVelocityMetersPerSecond);
-	//make the command run
+	command.schedule();
     }
 
     //make m/s 
     private void driveVelocityMetersPerSecond(Double left, Double right){
-	    leftFront.set(ControlMode.Velocity, left);
-	    rightFront.set(ControlMode.Velocity, right);
+	    leftMaster.set(ControlMode.Velocity, left);
+	    rightMaster.set(ControlMode.Velocity, right);
     }
 
     public void updateOdometry(){
