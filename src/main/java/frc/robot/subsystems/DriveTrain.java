@@ -40,9 +40,9 @@ public class DriveTrain {
         leftMaster.configFactoryDefault();
         rightMaster.configFactoryDefault();
 
-	//one encoder may be backwards
-	leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
-	rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
+	    //one encoder may be backwards
+	    leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
+	    rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
 
         leftMaster.config_kP(0,0.2);
         rightMaster.config_kP(0,0.2);
@@ -57,14 +57,15 @@ public class DriveTrain {
         rightSlave.follow(rightMaster);
     }
 
-    public void drive(double left, double right){
-        leftMaster.set(ControlMode.PercentOutput, left);
-        rightMaster.set(ControlMode.PercentOutput, right);
+    public void drive(double leftY, double rightX){
+        //Arcade drive probably
+        leftMaster.set(ControlMode.PercentOutput, rightX + leftY);
+        rightMaster.set(ControlMode.PercentOutput, rightX - leftY);
     }
 
     public void driveTrajectory(Trajectory trajectory){
-	RamseteCommand command = new RamseteCommand(trajectory, odometry::getPoseMeters, ramseteController, kinematics, this::driveVelocityMetersPerSecond);
-	command.schedule();
+	    RamseteCommand command = new RamseteCommand(trajectory, odometry::getPoseMeters, ramseteController, kinematics, this::driveVelocityMetersPerSecond);
+	    command.schedule();
     }
 
     private void driveVelocityMetersPerSecond(Double left, Double right){
