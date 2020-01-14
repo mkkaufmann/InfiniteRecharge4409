@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
     Rotation2d startRot = new Rotation2d(0);
     Rotation2d endRot = new Rotation2d(0);
     Pose2d startPose = new Pose2d(0,0,startRot);
-    Pose2d endPose = new Pose2d(0,1,endRot);
+    Pose2d endPose = new Pose2d(1,0,endRot);
 	  Trajectory trajectory = TrajectoryGenerator.generateTrajectory(startPose, waypoints, endPose, new TrajectoryConfig(.5,.25));
 	  driveTrain.driveTrajectory(trajectory);
   }

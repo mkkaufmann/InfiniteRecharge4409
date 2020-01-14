@@ -46,8 +46,8 @@ public class DriveTrain {
         rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         rightMaster.setInverted(true);        
 
-        leftMaster.config_kP(0,0.2);
-        rightMaster.config_kP(0,0.2);
+        leftMaster.config_kP(0,0);
+        rightMaster.config_kP(0,0);
         leftMaster.config_kI(0,0);
         rightMaster.config_kI(0,0);
         leftMaster.config_kD(0,0);
