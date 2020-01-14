@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import java.util.ArrayList;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -53,19 +54,23 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    driveTrain.zeroSensors();
     ArrayList<Translation2d> waypoints = new ArrayList<Translation2d>();
     Rotation2d startRot = new Rotation2d(0);
     Rotation2d endRot = new Rotation2d(0);
     Pose2d startPose = new Pose2d(0,0,startRot);
-    Pose2d endPose = new Pose2d(1,0,endRot);
+    Pose2d endPose = new Pose2d(2,0,endRot);
 	  Trajectory trajectory = TrajectoryGenerator.generateTrajectory(startPose, waypoints, endPose, new TrajectoryConfig(.5,.25));
 	  driveTrain.driveTrajectory(trajectory);
   }
 
   @Override
   public void teleopPeriodic() {
-	  CommandScheduler.getInstance().run();
-    
+    CommandScheduler.getInstance().run();
+    driveTrain.printEncoderValues();
+    driveTrain.updateOdometry();
+    //driveTrain.drive(-controller.getY(Hand.kLeft), -controller.getY(Hand.kRight));
+    //driveTrain.driveVelocityMetersPerSecond(1.0, 1.0);
   }
 
   @Override

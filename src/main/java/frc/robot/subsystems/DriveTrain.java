@@ -43,8 +43,12 @@ public class DriveTrain {
 	    //one encoder may be backwards
         leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         leftMaster.setSensorPhase(true);
+        leftSlave.setSensorPhase(true);
+        rightMaster.setSensorPhase(true);
+        rightSlave.setSensorPhase(true);
         rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         rightMaster.setInverted(true);        
+        rightSlave.setInverted(true);
 
         leftMaster.config_kP(0,0);
         rightMaster.config_kP(0,0);
@@ -59,10 +63,27 @@ public class DriveTrain {
         rightSlave.follow(rightMaster);
     }
 
+    public void printEncoderValues(){
+        System.out.println("left: "+ leftMaster.getSelectedSensorPosition()
+         + " right: "+ rightMaster.getSelectedSensorPosition()
+         + " gyro: " + navx.getYawRadians()*180/Math.PI
+         + " x: " + odometry.getPoseMeters().getTranslation().getX()
+         + " y: " + odometry.getPoseMeters().getTranslation().getY());
+    }
+
+    public void zeroSensors(){
+        navx.reset();
+        leftMaster.setSelectedSensorPosition(0);
+        rightMaster.setSelectedSensorPosition(0);
+    }
+
     public void drive(double leftY, double rightX){
-        //Arcade drive probably
-        leftMaster.set(ControlMode.PercentOutput, rightX + leftY);
-        rightMaster.set(ControlMode.PercentOutput, rightX - leftY);
+        //leftMaster.set(ControlMode.PercentOutput, rightX + leftY);
+        //rightMaster.set(ControlMode.PercentOutput, rightX - leftY);
+        leftMaster.set(ControlMode.PercentOutput, leftY);
+        rightMaster.set(ControlMode.PercentOutput, rightX);
+        System.out.printf("left: %d, right: %d%n", leftMaster.getSelectedSensorPosition(),rightMaster.getSelectedSensorPosition());
+
     }
 
     public void driveTrajectory(Trajectory trajectory){
@@ -70,7 +91,7 @@ public class DriveTrain {
 	    command.schedule();
     }
 
-    private void driveVelocityMetersPerSecond(Double left, Double right){
+    public void driveVelocityMetersPerSecond(Double left, Double right){
 	    leftMaster.set(ControlMode.Velocity, inchesToTicks(left * INCHES_PER_METER));
 	    rightMaster.set(ControlMode.Velocity, inchesToTicks(right * INCHES_PER_METER));
     }
@@ -81,7 +102,7 @@ public class DriveTrain {
 			new Rotation2d(navx.getYawRadians()), 
 			encoderTicksToInches(leftMaster.getSelectedSensorPosition())/INCHES_PER_METER, 
 			encoderTicksToInches(rightMaster.getSelectedSensorPosition())/INCHES_PER_METER
-			);
+            );            
     }
 
     private double encoderTicksToRevolutions(int ticks){
