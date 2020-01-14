@@ -41,8 +41,10 @@ public class DriveTrain {
         rightMaster.configFactoryDefault();
 
 	    //one encoder may be backwards
-	    leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
-	    rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
+        leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
+        leftMaster.setSensorPhase(true);
+        rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
+        rightMaster.setInverted(true);        
 
         leftMaster.config_kP(0,0.2);
         rightMaster.config_kP(0,0.2);
