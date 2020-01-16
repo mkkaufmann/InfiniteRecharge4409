@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import frc.robot.util.commands.CommandScheduler;
+import frc.robot.util.commands.RamseteCommand;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class Robot extends TimedRobot {
 
   DriveTrain driveTrain = new DriveTrain();
   XboxController controller = new XboxController(0); 
+  RamseteCommand traj;
 
   @Override
   public void robotInit() {
@@ -59,16 +61,18 @@ public class Robot extends TimedRobot {
     Rotation2d startRot = new Rotation2d(0);
     Rotation2d endRot = new Rotation2d(0);
     Pose2d startPose = new Pose2d(0,0,startRot);
-    Pose2d endPose = new Pose2d(2,0,endRot);
-	  Trajectory trajectory = TrajectoryGenerator.generateTrajectory(startPose, waypoints, endPose, new TrajectoryConfig(.5,.25));
-	  driveTrain.driveTrajectory(trajectory);
+    Pose2d endPose = new Pose2d(2.3938,0,endRot);
+	  Trajectory trajectory = TrajectoryGenerator.generateTrajectory(startPose, waypoints, endPose, new TrajectoryConfig(.25,.25));
+    traj = driveTrain.getTrajectory(trajectory);
+    traj.schedule();
   }
 
   @Override
   public void teleopPeriodic() {
+    driveTrain.updateOdometry();
     CommandScheduler.getInstance().run();
     driveTrain.printEncoderValues();
-    driveTrain.updateOdometry();
+    
     //driveTrain.drive(-controller.getY(Hand.kLeft), -controller.getY(Hand.kRight));
     //driveTrain.driveVelocityMetersPerSecond(1.0, 1.0);
   }

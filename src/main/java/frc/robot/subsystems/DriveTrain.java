@@ -19,7 +19,7 @@ public class DriveTrain {
     static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
     static final double WHEEL_DIAMETER_INCHES = 6.0;
     static final double INCHES_PER_METER = 39.37;
-
+    
     //motors
     TalonSRX leftMaster = new TalonSRX(3);        
     TalonSRX rightMaster = new TalonSRX(1);
@@ -50,14 +50,19 @@ public class DriveTrain {
         rightMaster.setInverted(true);        
         rightSlave.setInverted(true);
 
-        leftMaster.config_kP(0,0);
-        rightMaster.config_kP(0,0);
-        leftMaster.config_kI(0,0);
-        rightMaster.config_kI(0,0);
-        leftMaster.config_kD(0,0);
-        rightMaster.config_kD(0,0);
-        leftMaster.config_kF(0,0.4625);
-        rightMaster.config_kF(0,0.4625);
+        double p = 0.1;
+        double i = 0.00000;
+        double d = 0.00000;
+        double f = 0.6;
+
+        leftMaster.config_kP(0,p);
+        rightMaster.config_kP(0,p);
+        leftMaster.config_kI(0,i);
+        rightMaster.config_kI(0,i);
+        leftMaster.config_kD(0,d);
+        rightMaster.config_kD(0,d);
+        leftMaster.config_kF(0,f);
+        rightMaster.config_kF(0,f);
 
         leftSlave.follow(leftMaster);
         rightSlave.follow(rightMaster);
@@ -89,6 +94,10 @@ public class DriveTrain {
     public void driveTrajectory(Trajectory trajectory){
 	    RamseteCommand command = new RamseteCommand(trajectory, odometry::getPoseMeters, ramseteController, kinematics, this::driveVelocityMetersPerSecond);
 	    command.schedule();
+    }
+
+    public RamseteCommand getTrajectory(Trajectory trajectory){
+	    return new RamseteCommand(trajectory, odometry::getPoseMeters, ramseteController, kinematics, this::driveVelocityMetersPerSecond);
     }
 
     public void driveVelocityMetersPerSecond(Double left, Double right){
