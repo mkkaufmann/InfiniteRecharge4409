@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.XboxController;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.I2C.Port;
+import com.revrobotics.ColorSensorV3;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,9 +39,10 @@ public class Robot extends TimedRobot {
    * for any initialization code.
    */
 
-  DriveTrain driveTrain = new DriveTrain();
+  //DriveTrain driveTrain = new DriveTrain();
   XboxController controller = new XboxController(0); 
   RamseteCommand traj;
+  ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
 
   @Override
   public void robotInit() {
@@ -56,23 +60,23 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    driveTrain.zeroSensors();
+    //driveTrain.zeroSensors();
     ArrayList<Translation2d> waypoints = new ArrayList<Translation2d>();
     Rotation2d startRot = new Rotation2d(0);
     Rotation2d endRot = new Rotation2d(0);
     Pose2d startPose = new Pose2d(0,0,startRot);
     Pose2d endPose = new Pose2d(2.3938,0,endRot);
 	  Trajectory trajectory = TrajectoryGenerator.generateTrajectory(startPose, waypoints, endPose, new TrajectoryConfig(.25,.25));
-    traj = driveTrain.getTrajectory(trajectory);
-    traj.schedule();
+    //traj = driveTrain.getTrajectory(trajectory);
+    //traj.schedule();
   }
 
   @Override
   public void teleopPeriodic() {
-    driveTrain.updateOdometry();
+    //driveTrain.updateOdometry();
     CommandScheduler.getInstance().run();
-    driveTrain.printEncoderValues();
-    
+    //driveTrain.printEncoderValues();
+    System.out.println(colorSensor.getBlue());
     //driveTrain.drive(-controller.getY(Hand.kLeft), -controller.getY(Hand.kRight));
     //driveTrain.driveVelocityMetersPerSecond(1.0, 1.0);
   }
