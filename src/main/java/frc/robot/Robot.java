@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
   //DriveTrain driveTrain = new DriveTrain();
   XboxController controller = new XboxController(0); 
   RamseteCommand traj;
-  ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+  ColorSensor colorSensor = new ColorSensor();
 
   @Override
   public void robotInit() {
@@ -75,8 +75,12 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     //driveTrain.updateOdometry();
     CommandScheduler.getInstance().run();
+    
+    if(controller.getBButtonPressed()){
+      colorSensor.printColors();
+    }
+    
     //driveTrain.printEncoderValues();
-    System.out.println(colorSensor.getBlue());
     //driveTrain.drive(-controller.getY(Hand.kLeft), -controller.getY(Hand.kRight));
     //driveTrain.driveVelocityMetersPerSecond(1.0, 1.0);
   }
