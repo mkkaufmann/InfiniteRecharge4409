@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DriverStation;
 /**
@@ -53,6 +54,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     driveEnabled = true;
+    SmartDashboard.putNumber("Flywheel RPM", 3660);
   }
 
   @Override
@@ -85,10 +87,8 @@ public class Robot extends TimedRobot {
       leftBack.set(rightX + leftY);
       rightBack.set(rightX - leftY);
     }
-
-
-    //flywheel.runFlywheel(controller.getY(Hand.kRight));
-    flywheel.runRPM(-1000);
+    
+    flywheel.runRPM(SmartDashboard.getNumber("Flywheel RPM", 0));
   }
 
   @Override
