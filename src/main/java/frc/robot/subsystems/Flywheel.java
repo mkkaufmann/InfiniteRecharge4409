@@ -1,13 +1,14 @@
-package frc.robot;
+package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-class Flywheel {
+public class Flywheel extends SubsystemBase {
 
     static final int MAX_MOTOR_RPM = 18370;
     static final double GEARBOX_RATIO = 3.25;
@@ -88,4 +89,13 @@ class Flywheel {
     // private double getDesiredSurfaceSpeed(double projectileSpeed){
     //     return projectileSpeed/SPEED_TRANSFER_TO_BALL; 
     // }
+    private double getDesiredSurfaceSpeed(double projectileSpeed){
+        return projectileSpeed/SPEED_TRANSFER_TO_BALL; 
+    }
+
+    @Override
+    public void periodic(){
+
+    }
+
 }

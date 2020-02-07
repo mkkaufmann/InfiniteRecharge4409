@@ -8,12 +8,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.*;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -27,17 +29,11 @@ public class Robot extends TimedRobot {
    * for any initialization code.
    */
 
-  Jaguar leftFront = new Jaguar(0);
-  Jaguar rightFront = new Jaguar(2);
-  Jaguar leftBack = new Jaguar(1);
-  Jaguar rightBack = new Jaguar(3);
 
-  XboxController controller = new XboxController(0);
-  ADXRS450_Gyro gyro = new ADXRS450_Gyro();
-  boolean driveEnabled = false;
-  Flywheel flywheel = new Flywheel();
-
-
+   Flywheel flywheel = new Flywheel();
+   Limelight limelight = new Limelight();
+   Drivetrain drivetrain = new Drivetrain();
+   XboxController controller = new XboxController(0);
 
   @Override
   public void robotInit() {
@@ -49,46 +45,24 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    CommandScheduler.getInstance().run();
   }
 
   @Override
   public void teleopInit() {
-    driveEnabled = true;
-    SmartDashboard.putNumber("Flywheel RPM", 3660);
   }
 
   @Override
   public void teleopPeriodic() {
-    double driveMult = .33;
-    double turnMult = .25;
-    double turnMultThreshold = .5;
-    double driveMultThreshold = .5;
 
-    //Double turn speed when right trigger is depressed
-    if(controller.getTriggerAxis(Hand.kLeft) > turnMultThreshold)
-      turnMult = .5;
-    else
-      turnMult = .25;
+    //drivetrain.tankDrive(controller.getY(Hand.kLeft), controller.getY(Hand.kRight));
 
-    //Double drive speed when left trigger is depressed
-    if(controller.getTriggerAxis(Hand.kRight) > driveMultThreshold)
-      driveMult = .66;
-    else
-      driveMult = .33;
-
-    //Get joystick input and scale it
-    double leftY = -controller.getY(Hand.kLeft)*driveMult;
-    double rightX = controller.getX(Hand.kRight)*turnMult;
-
-    //Drive
-    if(driveEnabled){
-      leftFront.set(rightX + leftY);
-      rightFront.set(rightX - leftY);
-      leftBack.set(rightX + leftY);
-      rightBack.set(rightX - leftY);
-    }
-    
-    flywheel.runRPM(SmartDashboard.getNumber("Flywheel RPM", 0));
+    limelight.runLimelight();
+    //limelight.getLLdistance();
+    if(controller.getBButton())
+      limelight.autoAim(drivetrain);
+      else
+        drivetrain.tankDrive(controller.getY(Hand.kLeft), controller.getY(Hand.kRight));
   }
 
   @Override
