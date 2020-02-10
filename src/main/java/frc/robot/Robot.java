@@ -60,9 +60,9 @@ public class Robot extends TimedRobot {
     limelight.runLimelight();
     //limelight.getLLdistance();
     if(controller.getBButton())
-      limelight.autoAim(drivetrain);
+      limelight.autoAim(drivetrain, controller.getY(Hand.kLeft));
       else
-        drivetrain.tankDrive(controller.getY(Hand.kLeft), controller.getY(Hand.kRight));
+        drivetrain.arcadeDrive(controller.getY(Hand.kLeft), controller.getX(Hand.kRight));
   }
 
   @Override

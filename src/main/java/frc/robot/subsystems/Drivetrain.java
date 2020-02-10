@@ -29,9 +29,9 @@ public class Drivetrain{
         rightFollower.follow(rightMaster);
     }
 
-    public void tankDrive(double left, double right){
-      leftMaster.set(ControlMode.PercentOutput, -left);
-      rightMaster.set(ControlMode.PercentOutput, right);
-    }
+    public void arcadeDrive(double drive, double turn){
+        leftMaster.set(ControlMode.PercentOutput, drive + turn);
+        rightMaster.set(ControlMode.PercentOutput, -(drive - turn));
 
+    }
 }

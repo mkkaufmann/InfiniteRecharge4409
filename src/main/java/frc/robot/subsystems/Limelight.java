@@ -39,7 +39,7 @@ public class Limelight{
         System.out.println("Distance est: " + heightDiff/(Math.tan(Math.toRadians(ty.getDouble(0.0)))+mountAngle));
     }
 
-    public void autoAim(Drivetrain drivetrain){
+    public void autoAim(Drivetrain drivetrain, double drive){
         prevYaw = curYaw;
         curYaw = tx.getDouble(0.00123);
         diffYaw = curYaw - prevYaw;
@@ -47,7 +47,7 @@ public class Limelight{
         if(Math.abs(curYaw) < .25)
             totalError = 0;
         double steering = tx.getDouble(0.00123) * kP + diffYaw * kD + totalError * kI;
-        drivetrain.tankDrive(steering, -steering);
+        drivetrain.arcadeDrive(drive, -steering);
     }
 
 }
