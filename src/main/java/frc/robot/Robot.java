@@ -22,19 +22,21 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
-
+  RobotContainer container;
   @Override
   public void robotInit() {
-    RobotContainer container = new RobotContainer();
+    container = new RobotContainer();
   }
 
   @Override
   public void autonomousInit() {
+    container.getAutonomousCommand().schedule();
   }
 
   @Override
   public void autonomousPeriodic() {
     CommandScheduler.getInstance().run();
+    
   }
 
   @Override
