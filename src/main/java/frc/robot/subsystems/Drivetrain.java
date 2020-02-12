@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.geometry.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.controller.*;
@@ -14,15 +16,22 @@ import edu.wpi.first.wpilibj.util.Units;
 
 
 public class Drivetrain extends SubsystemBase {
-    
+
+  private static final double LOW_GEAR_RATIO = 10;
+  private static final double HIGH_GEAR_RATIO = 5;
+  boolean isHighGear = false;
+
   CANSparkMax leftMaster = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
   CANSparkMax rightMaster = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
   CANSparkMax leftSlave1 = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
   CANSparkMax rightSlave1 = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
   CANSparkMax leftSlave2 = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
   CANSparkMax rightSlave2 = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
+  
+  DoubleSolenoid leftShifter = new DoubleSolenoid(1, 2);
+  DoubleSolenoid rightShifter = new DoubleSolenoid(3, 4);
 
-  double gearRatio = 10;
+  double gearRatio = LOW_GEAR_RATIO;
   double ks = 0;
   double kv = 0;
   double ka = 0;
@@ -69,6 +78,21 @@ public class Drivetrain extends SubsystemBase {
     rightSlave2.follow(rightMaster);
   }
   
+  public void shift(boolean toHighGear) {
+    if(toHighGear){
+      gearRatio = HIGH_GEAR_RATIO;
+      isHighGear = true;
+      leftShifter.set(DoubleSolenoid.Value.kForward);
+      rightShifter.set(DoubleSolenoid.Value.kForward);
+    }
+    else{
+      gearRatio = LOW_GEAR_RATIO;
+      isHighGear = false;
+      leftShifter.set(DoubleSolenoid.Value.kReverse);
+      rightShifter.set(DoubleSolenoid.Value.kReverse);
+    }
+  }
+
   public DifferentialDriveWheelSpeeds getSpeeds(){
     return new DifferentialDriveWheelSpeeds(
         leftMaster.getEncoder().getVelocity() / gearRatio * 2 * Math.PI * Units.inchesToMeters(2.5) / 60,
