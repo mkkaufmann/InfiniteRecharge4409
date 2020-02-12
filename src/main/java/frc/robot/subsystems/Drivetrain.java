@@ -28,8 +28,8 @@ public class Drivetrain extends SubsystemBase {
   CANSparkMax leftSlave2 = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
   CANSparkMax rightSlave2 = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
   
-  DoubleSolenoid leftShifter = new DoubleSolenoid(1, 2);
-  DoubleSolenoid rightShifter = new DoubleSolenoid(3, 4);
+  DoubleSolenoid shifter = new DoubleSolenoid(1, 2);
+
 
   double gearRatio = LOW_GEAR_RATIO;
   double ks = 0;
@@ -82,14 +82,12 @@ public class Drivetrain extends SubsystemBase {
     if(toHighGear){
       gearRatio = HIGH_GEAR_RATIO;
       isHighGear = true;
-      leftShifter.set(DoubleSolenoid.Value.kForward);
-      rightShifter.set(DoubleSolenoid.Value.kForward);
+      shifter.set(DoubleSolenoid.Value.kForward);
     }
     else{
       gearRatio = LOW_GEAR_RATIO;
       isHighGear = false;
-      leftShifter.set(DoubleSolenoid.Value.kReverse);
-      rightShifter.set(DoubleSolenoid.Value.kReverse);
+      shifter.set(DoubleSolenoid.Value.kReverse);
     }
   }
 
