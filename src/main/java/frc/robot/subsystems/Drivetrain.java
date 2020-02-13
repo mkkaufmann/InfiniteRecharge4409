@@ -17,8 +17,10 @@ import edu.wpi.first.wpilibj.util.Units;
 
 public class Drivetrain extends SubsystemBase {
 
-  private static final double LOW_GEAR_RATIO = 10;
-  private static final double HIGH_GEAR_RATIO = 5;
+  private static final double LOW_GEAR_RATIO = 10; //more torque
+  private static final double HIGH_GEAR_RATIO = 5; //more speed
+  private static final double SHIFT_TO_LOW_THRESHOLD = 2; //fps
+  private static final double SHIFT_TO_HIGH_THRESHOLD = 5; //fps
   boolean isHighGear = false;
 
   CANSparkMax leftMaster = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -91,6 +93,19 @@ public class Drivetrain extends SubsystemBase {
     }
   }
 
+  public void autoShift() {
+    DifferentialDriveWheelSpeeds speeds = getSpeeds();
+    double leftSpeed = Units.metersToFeet(speeds.leftMetersPerSecond);
+    double rightSpeed = Units.metersToFeet(speeds.rightMetersPerSecond);
+    double averageSpeed = (leftSpeed + rightSpeed) / 2;
+    if(averageSpeed > SHIFT_TO_HIGH_THRESHOLD) {
+      shift(true);
+    }
+    else if(averageSpeed < SHIFT_TO_LOW_THRESHOLD) {
+      shift(false);
+    }
+  }
+
   public DifferentialDriveWheelSpeeds getSpeeds(){
     return new DifferentialDriveWheelSpeeds(
         leftMaster.getEncoder().getVelocity() / gearRatio * 2 * Math.PI * Units.inchesToMeters(2.5) / 60,
@@ -128,6 +143,7 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic(){
     pose = odometry.update(getHeading(), getSpeeds().leftMetersPerSecond, getSpeeds().rightMetersPerSecond);
+    //autoShift();
   }
 }
 
