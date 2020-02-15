@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj.util.Units;
 
 public class Drivetrain extends SubsystemBase {
 
-  private static final double LOW_GEAR_RATIO = 10; //more torque
-  private static final double HIGH_GEAR_RATIO = 5; //more speed
+  private static final double LOW_GEAR_RATIO = 15.32; //more torque
+  private static final double HIGH_GEAR_RATIO = 7.08; //more speed
   private static final double SHIFT_TO_LOW_THRESHOLD = 2; //fps
   private static final double SHIFT_TO_HIGH_THRESHOLD = 5; //fps
   boolean isHighGear = false;
