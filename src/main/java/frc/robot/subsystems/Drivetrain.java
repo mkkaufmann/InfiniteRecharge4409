@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.CheesyDriveHelper;
+import frc.robot.util.DriveSignal;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
@@ -58,6 +60,8 @@ public class Drivetrain extends SubsystemBase {
   PIDController leftController = new PIDController(0,0,0);
   PIDController rightController = new PIDController(0,0,0);
 
+  CheesyDriveHelper cheesyDriveHelper = new CheesyDriveHelper();
+
   public Rotation2d getHeading(){
     return Rotation2d.fromDegrees(-navx.getAngle());
   }
@@ -106,6 +110,11 @@ public class Drivetrain extends SubsystemBase {
     }
   }
 
+  public void cheesyDrive(double throttle, double turn, boolean isQuickTurn){
+    DriveSignal signal = cheesyDriveHelper.cheesyDrive(throttle, turn, isQuickTurn, isHighGear);
+    setOutput(signal.getLeft() * 12, 12 * signal.getRight());
+  }
+
   public DifferentialDriveWheelSpeeds getSpeeds(){
     return new DifferentialDriveWheelSpeeds(
         leftMaster.getEncoder().getVelocity() / gearRatio * 2 * Math.PI * Units.inchesToMeters(2.5) / 60,
@@ -130,7 +139,6 @@ public class Drivetrain extends SubsystemBase {
     rightMaster.set(rightVolts / 12);
   }
 
-
   public PIDController getleftPIDController() {
       return leftPIDController;
   }
@@ -138,7 +146,6 @@ public class Drivetrain extends SubsystemBase {
   public PIDController getrightPIDController() {
       return rightPIDController;
   }
-
 
   @Override
   public void periodic(){
