@@ -6,7 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
-class Flywheel extends SubsystemBase {
+public class Flywheel extends SubsystemBase {
 
     static final int MAX_MOTOR_RPM = 18370;
     static final double GEARBOX_RATIO = 3.25;
