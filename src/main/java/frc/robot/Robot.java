@@ -6,11 +6,14 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-
-import edu.wpi.first.hal.sim.DriverStationSim;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.util.CheesyDriveHelper;
+import frc.robot.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,15 +27,19 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
-  RobotContainer container;
+
+
+   Flywheel flywheel = new Flywheel();
+   Limelight limelight = new Limelight();
+   Drivetrain drivetrain = new Drivetrain();
+   XboxController controller = new XboxController(0);
+
   @Override
   public void robotInit() {
-    container = new RobotContainer();
   }
 
   @Override
   public void autonomousInit() {
-    container.getAutonomousCommand().schedule();
   }
 
   @Override
@@ -46,7 +53,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    CommandScheduler.getInstance().run();
+
+    //drivetrain.tankDrive(controller.getY(Hand.kLeft), controller.getY(Hand.kRight));
+
+    limelight.runLimelight();
+    //limelight.getLLdistance();
+    if(controller.getBButton())
+      limelight.autoAim(drivetrain, controller.getY(Hand.kLeft));
+      else
+        drivetrain.cheesyDrive(controller.getY(Hand.kLeft), controller.getX(Hand.kRight), true);
   }
 
   @Override
