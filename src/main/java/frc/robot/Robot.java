@@ -33,6 +33,8 @@ public class Robot extends TimedRobot {
    Limelight limelight = new Limelight();
    Drivetrain drivetrain = new Drivetrain();
    XboxController controller = new XboxController(0);
+   Intake intake = new Intake();
+   Climber climber = new Climber();
 
   @Override
   public void robotInit() {
@@ -58,10 +60,29 @@ public class Robot extends TimedRobot {
 
     limelight.runLimelight();
     //limelight.getLLdistance();
-    if(controller.getBButton())
+    if(Math.abs(controller.getTriggerAxis(Hand.kRight)) > 0.5){
       limelight.autoAim(drivetrain, controller.getY(Hand.kLeft));
-      else
-        drivetrain.cheesyDrive(controller.getY(Hand.kLeft), controller.getX(Hand.kRight), true);
+    }else{
+        drivetrain.cheesyDrive(controller.getY(Hand.kLeft), controller.getX(Hand.kRight), Math.abs(controller.getTriggerAxis(Hand.kLeft)) > 0.5);
+    }
+    if(controller.getXButtonPressed()){
+      intake.intake();
+    }
+    else if(controller.getBButtonPressed()){
+      intake.outtake();
+    }
+    else{
+      intake.stop();
+    }
+    if(controller.getYButtonPressed()){
+      climber.up();
+    }
+    else if(controller.getAButtonPressed()){
+      climber.down();
+    }
+    else{
+      climber.stop();
+    }
   }
 
   @Override
@@ -71,5 +92,4 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
-
 }

@@ -23,6 +23,8 @@ public class Drivetrain extends SubsystemBase {
   private static final double HIGH_GEAR_RATIO = 7.08; //more speed
   private static final double SHIFT_TO_LOW_THRESHOLD = 2; //fps
   private static final double SHIFT_TO_HIGH_THRESHOLD = 5; //fps
+  private static final double OUTPUT_VOLTS = 12;
+  private static final double WHEEL_RADIUS = 2.5;
   boolean isHighGear = false;
 
   CANSparkMax leftMaster = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -112,13 +114,13 @@ public class Drivetrain extends SubsystemBase {
 
   public void cheesyDrive(double throttle, double turn, boolean isQuickTurn){
     DriveSignal signal = cheesyDriveHelper.cheesyDrive(throttle, turn, isQuickTurn, isHighGear);
-    setOutput(signal.getLeft() * 12, 12 * signal.getRight());
+    setOutput(signal.getLeft() * OUTPUT_VOLTS, OUTPUT_VOLTS * signal.getRight());
   }
 
   public DifferentialDriveWheelSpeeds getSpeeds(){
     return new DifferentialDriveWheelSpeeds(
-        leftMaster.getEncoder().getVelocity() / gearRatio * 2 * Math.PI * Units.inchesToMeters(2.5) / 60,
-        rightMaster.getEncoder().getVelocity() / gearRatio * 2 * Math.PI * Units.inchesToMeters(2.5) / 60
+        leftMaster.getEncoder().getVelocity() / gearRatio * 2 * Math.PI * Units.inchesToMeters(WHEEL_RADIUS) / 60,
+        rightMaster.getEncoder().getVelocity() / gearRatio * 2 * Math.PI * Units.inchesToMeters(WHEEL_RADIUS) / 60
     );
   }
 
@@ -135,8 +137,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void setOutput(double leftVolts, double rightVolts) {
-    leftMaster.set(leftVolts / 12);
-    rightMaster.set(rightVolts / 12);
+    leftMaster.set(leftVolts / OUTPUT_VOLTS);
+    rightMaster.set(rightVolts / OUTPUT_VOLTS);
   }
 
   public PIDController getleftPIDController() {

@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-class Climber extends SubsystemBase{
+public class Climber extends SubsystemBase{
     TalonSRX master = new TalonSRX(420);
     VictorSPX slave = new VictorSPX(2);
     public Climber(){

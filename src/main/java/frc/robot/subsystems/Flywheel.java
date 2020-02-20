@@ -58,24 +58,6 @@ public class Flywheel extends SubsystemBase {
         runRotationsPer100ms(getDesiredSurfaceSpeed(inchesPerSecondToRotationsPer100ms(inchesPerSecond)));
     }
 
-    public void shootUsingPhysicsFromDistance(double inches){
-        double targetSpeedInchesPerSecond;
-        //trajectory math for finding an optimal speed, pulled from a trajectory spreadsheet
-        //variables just break the problem into chunks
-        double D = MAX_PROJECTILE_VELOCITY_INCHES_PER_SECOND/(1 + VELOCITY_ERROR);
-        try{
-            double A = inches * inches * 2 * 386.088583;
-            double B = Math.tan(FLYWHEEL_ANGLE_RADIANS) * Math.tan(FLYWHEEL_ANGLE_RADIANS);
-            double E = (inches * Math.tan(FLYWHEEL_ANGLE_RADIANS)) - (HEIGHT_OF_TARGET_INCHES - FIRING_HEIGHT_INCHES);
-            double F = (A * B) / E;
-            double G = 0.5 * 1.0/Math.sin(FLYWHEEL_ANGLE_RADIANS) * Math.sqrt(F);
-            targetSpeedInchesPerSecond = Math.min(G, D);
-        }catch(Exception e){ 
-            targetSpeedInchesPerSecond = D;
-        };
-        shootProjectileAtSpeed(targetSpeedInchesPerSecond);
-    }
-
     private double rpmToRotationsPer100ms(double rpm){
         return rpm/600;
     }
