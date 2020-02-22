@@ -11,7 +11,7 @@ public class Limelight extends SubsystemBase{
     static final double kI = -0.01;
     static final double kD = -0.15;
     static final double goalHeightMid = 89;
-    static final double mountHeight = 48;
+    static final double mountHeight = 25.5;
     static final double heightDiff = goalHeightMid-mountHeight;
     static final double mountAngle = Math.toRadians(-1.402);
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");

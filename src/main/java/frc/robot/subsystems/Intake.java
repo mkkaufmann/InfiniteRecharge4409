@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class Intake extends SubsystemBase {
-    VictorSPX intake = new VictorSPX(69);
-    DoubleSolenoid pusherOuter = new DoubleSolenoid(6, 9);
+    VictorSPX intake = new VictorSPX(9);
+    DoubleSolenoid pusherOuter = new DoubleSolenoid(4, 3);
     boolean isOut = false;
     public Intake() {
 

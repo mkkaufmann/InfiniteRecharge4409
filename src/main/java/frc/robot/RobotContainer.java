@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-
 public class RobotContainer {
 
   public Command getAutonomousCommand(Drivetrain drive) {
@@ -38,3 +37,4 @@ public class RobotContainer {
     return command;
   }
 };
+

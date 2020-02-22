@@ -23,8 +23,8 @@ public class Flywheel extends SubsystemBase {
     static final double VELOCITY_ERROR = 0.02;
     static final double HEIGHT_OF_TARGET_INCHES = 98.25;
 
-    TalonSRX flywheelMaster = new TalonSRX(0);
-    VictorSPX flywheelFollower = new VictorSPX(1);
+    TalonSRX flywheelMaster = new TalonSRX(7);
+    VictorSPX flywheelFollower = new VictorSPX(8);
     
     public Flywheel(){
         flywheelMaster.setInverted(true);

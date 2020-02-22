@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -36,6 +37,7 @@ public class Robot extends TimedRobot {
    Limelight limelight = new Limelight();
    Drivetrain drivetrain = new Drivetrain();
    XboxController controller = new XboxController(0);
+   XboxController partner = new XboxController(1);
    Intake intake = new Intake();
    Climber climber = new Climber();
    Hopper hopper = new Hopper();
@@ -43,6 +45,7 @@ public class Robot extends TimedRobot {
    IntakeStopCommand stopIntake = new IntakeStopCommand(intake);
    HopperStopCommand stopHopper = new HopperStopCommand(hopper);
    ClimberStopCommand stopClimber = new ClimberStopCommand(climber);
+   Compressor compressor = new Compressor();
 
   @Override
   public void robotInit() {
@@ -56,6 +59,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().registerSubsystem(climber);
     CommandScheduler.getInstance().registerSubsystem(hopper);
     SmartDashboard.putNumber("Flywheel RPM", 0); 
+    compressor.setClosedLoopControl(true);
   }
 
   @Override
@@ -74,30 +78,42 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    CommandScheduler.getInstance().run();
     //limelight.getLLdistance();
+    limelight.run();
     if(Math.abs(controller.getTriggerAxis(Hand.kRight)) > 0.5){
+      drivetrain.shift(false);
       limelight.autoAim(drivetrain, controller.getY(Hand.kLeft));
     }else{
-        limelight.stop();
-        drivetrain.cheesyDrive(controller.getY(Hand.kLeft), controller.getX(Hand.kRight), Math.abs(controller.getTriggerAxis(Hand.kLeft)) > 0.5);
+        //limelight.stop();
+        double throttle = controller.getY(Hand.kRight);
+        drivetrain.cheesyDrive(throttle, -controller.getX(Hand.kLeft), Math.abs(controller.getTriggerAxis(Hand.kLeft)) > 0.5 || Math.abs(throttle) < 0.1);
     }
-    if(controller.getXButtonPressed()){
+    if(partner.getXButton()){
       intake.intake();
     }
-    else if(controller.getBButtonPressed()){
+    else if(partner.getBButton()){
       intake.outtake();
     }
     else{
       intake.stop();
     }
-    if(controller.getYButtonPressed()){
+    if(controller.getYButton()){
       climber.up(1);
     }
-    else if(controller.getAButtonPressed()){
+    else if(controller.getAButton()){
       climber.down(1);
     }
     else{
       climber.stop();
+    }
+    if(partner.getBumper(Hand.kLeft)){
+      flywheel.runRPM(SmartDashboard.getNumber("Flywheel RPM", 0));
+    }else{
+      flywheel.runRPM(0);
+    }
+    if(controller.getBumperPressed(Hand.kRight)){
+      drivetrain.shift(!drivetrain.getHighGear());
     }
   }
 

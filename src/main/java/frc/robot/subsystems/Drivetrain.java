@@ -22,10 +22,10 @@ public class Drivetrain extends SubsystemBase {
   private static final double LOW_GEAR_RATIO = 15.32; //more torque
   private static final double HIGH_GEAR_RATIO = 7.08; //more speed
   private static final double SHIFT_TO_LOW_THRESHOLD = 2; //fps
-  private static final double SHIFT_TO_HIGH_THRESHOLD = 5; //fps
+  private static final double SHIFT_TO_HIGH_THRESHOLD = 4; //fps
   private static final double OUTPUT_VOLTS = 12;
   private static final double WHEEL_RADIUS = 2.5;
-  boolean isHighGear = false;
+  private boolean isHighGear = false;
 
   CANSparkMax leftMaster = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
   CANSparkMax rightMaster = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -34,7 +34,7 @@ public class Drivetrain extends SubsystemBase {
   CANSparkMax leftSlave2 = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
   CANSparkMax rightSlave2 = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
   
-  DoubleSolenoid shifter = new DoubleSolenoid(4, 5);
+  DoubleSolenoid shifter = new DoubleSolenoid(2, 5);
 
 
   double gearRatio = LOW_GEAR_RATIO;
@@ -99,11 +99,21 @@ public class Drivetrain extends SubsystemBase {
     }
   }
 
+
+
   public void autoShift() {
     DifferentialDriveWheelSpeeds speeds = getSpeeds();
-    double leftSpeed = Units.metersToFeet(speeds.leftMetersPerSecond);
-    double rightSpeed = Units.metersToFeet(speeds.rightMetersPerSecond);
-    double averageSpeed = (leftSpeed + rightSpeed) / 2;
+    double leftSpeed = Math.abs(Units.metersToFeet(speeds.leftMetersPerSecond));
+    double rightSpeed = Math.abs(Units.metersToFeet(speeds.rightMetersPerSecond));
+    
+    boolean leftIsNegative = Units.metersToFeet(speeds.leftMetersPerSecond)/leftSpeed == -1;
+    boolean rightIsNegative = Units.metersToFeet(speeds.rightMetersPerSecond)/rightSpeed == -1;
+    double averageSpeed;
+    if((leftIsNegative && rightIsNegative) || (!leftIsNegative && !rightIsNegative)){
+      averageSpeed = (leftSpeed + rightSpeed) / 2;
+    }else{
+      averageSpeed = Math.abs((leftSpeed - rightSpeed) / 2);
+    }
     if(averageSpeed > SHIFT_TO_HIGH_THRESHOLD) {
       shift(true);
     }
@@ -136,6 +146,10 @@ public class Drivetrain extends SubsystemBase {
     return pose;
   }
 
+  public boolean getHighGear(){
+    return this.isHighGear;
+  }
+
   public void setOutput(double leftVolts, double rightVolts) {
     leftMaster.set(leftVolts / OUTPUT_VOLTS);
     rightMaster.set(rightVolts / OUTPUT_VOLTS);
@@ -151,7 +165,10 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic(){
+    System.out.println();
     pose = odometry.update(getHeading(), getSpeeds().leftMetersPerSecond, getSpeeds().rightMetersPerSecond);
+    
+    
     //autoShift();
   }
 }
