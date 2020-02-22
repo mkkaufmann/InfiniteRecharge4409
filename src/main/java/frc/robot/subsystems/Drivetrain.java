@@ -34,7 +34,7 @@ public class Drivetrain extends SubsystemBase {
   CANSparkMax leftSlave2 = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
   CANSparkMax rightSlave2 = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
   
-  DoubleSolenoid shifter = new DoubleSolenoid(1, 2);
+  DoubleSolenoid shifter = new DoubleSolenoid(4, 5);
 
 
   double gearRatio = LOW_GEAR_RATIO;
