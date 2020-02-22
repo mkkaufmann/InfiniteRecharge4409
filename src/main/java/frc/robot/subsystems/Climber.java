@@ -13,11 +13,11 @@ public class Climber extends SubsystemBase{
     public Climber(){
         slave.follow(master);
     }
-    public void up(){
-        master.set(ControlMode.PercentOutput, 0.75);
+    public void up(double setSpeed){
+        master.set(ControlMode.PercentOutput, setSpeed);
     }
-    public void down(){
-        master.set(ControlMode.PercentOutput, -0.75);
+    public void down(double setSpeed){
+        master.set(ControlMode.PercentOutput, -setSpeed);
     }
     public void stop(){
         master.set(ControlMode.PercentOutput, 0);

@@ -9,10 +9,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+// import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.IntakeStopCommand;
+import frc.robot.commands.HopperStopCommand;
+import frc.robot.commands.ClimberStopCommand;
 import frc.robot.subsystems.*;
 
 /**
@@ -35,9 +38,16 @@ public class Robot extends TimedRobot {
    XboxController controller = new XboxController(0);
    Intake intake = new Intake();
    Climber climber = new Climber();
+   Hopper hopper = new Hopper();
+   IntakeStopCommand stopIntake = new IntakeStopCommand(intake);
+   HopperStopCommand stopHopper = new HopperStopCommand(hopper);
+   ClimberStopCommand stopClimber = new ClimberStopCommand(climber);
 
   @Override
   public void robotInit() {
+    CommandScheduler.getInstance().setDefaultCommand(intake, stopIntake);
+    CommandScheduler.getInstance().setDefaultCommand(hopper, stopHopper);
+    CommandScheduler.getInstance().setDefaultCommand(climber, stopClimber);
   }
 
   @Override
@@ -75,10 +85,10 @@ public class Robot extends TimedRobot {
       intake.stop();
     }
     if(controller.getYButtonPressed()){
-      climber.up();
+      climber.up(1);
     }
     else if(controller.getAButtonPressed()){
-      climber.down();
+      climber.down(1);
     }
     else{
       climber.stop();
