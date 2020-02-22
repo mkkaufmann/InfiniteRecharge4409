@@ -48,6 +48,12 @@ public class Robot extends TimedRobot {
     //CommandScheduler.getInstance().setDefaultCommand(intake, stopIntake);
     //CommandScheduler.getInstance().setDefaultCommand(hopper, stopHopper);
     //CommandScheduler.getInstance().setDefaultCommand(climber, stopClimber);
+    CommandScheduler.getInstance().registerSubsystem(intake);
+    CommandScheduler.getInstance().registerSubsystem(limelight);
+    CommandScheduler.getInstance().registerSubsystem(drivetrain);
+    CommandScheduler.getInstance().registerSubsystem(flywheel);
+    CommandScheduler.getInstance().registerSubsystem(climber);
+    CommandScheduler.getInstance().registerSubsystem(hopper);
   }
 
   @Override
@@ -68,7 +74,6 @@ public class Robot extends TimedRobot {
 
     //drivetrain.tankDrive(controller.getY(Hand.kLeft), controller.getY(Hand.kRight));
 
-    limelight.runLimelight();
     //limelight.getLLdistance();
     if(Math.abs(controller.getTriggerAxis(Hand.kRight)) > 0.5){
       limelight.autoAim(drivetrain, controller.getY(Hand.kLeft));

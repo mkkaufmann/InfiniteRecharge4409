@@ -3,9 +3,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
-public class Limelight{
+public class Limelight extends SubsystemBase{
 
     static final double kP = -1/25.0;
     static final double kI = -0.01;
@@ -25,7 +25,8 @@ public class Limelight{
     double diffYaw;
     double totalError;
 
-    public void runLimelight(){
+    @Override
+    public void periodic(){
         //System.out.println("Valid target: " + tv.getDouble(0.0));
         System.out.println("Horizontal offset: " + tx.getDouble(0.00123));
         //System.out.println("Vertical offset: " + ty.getDouble(0.0));
