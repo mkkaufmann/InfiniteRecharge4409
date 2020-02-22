@@ -13,10 +13,8 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 public class RobotContainer {
-  
-  private Drivetrain drive = new Drivetrain();
 
-  public Command getAutonomousCommand() {
+  public Command getAutonomousCommand(Drivetrain drive) {
     TrajectoryConfig config = new TrajectoryConfig(2, 2);
     config.setKinematics(drive.getKinematics());
 

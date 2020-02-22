@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
    Intake intake = new Intake();
    Climber climber = new Climber();
    Hopper hopper = new Hopper();
+   RobotContainer container = new RobotContainer();
    IntakeStopCommand stopIntake = new IntakeStopCommand(intake);
    HopperStopCommand stopHopper = new HopperStopCommand(hopper);
    ClimberStopCommand stopClimber = new ClimberStopCommand(climber);
@@ -58,6 +59,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    container.getAutonomousCommand(drivetrain);
   }
 
   @Override
