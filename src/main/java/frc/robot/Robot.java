@@ -45,9 +45,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    CommandScheduler.getInstance().setDefaultCommand(intake, stopIntake);
-    CommandScheduler.getInstance().setDefaultCommand(hopper, stopHopper);
-    CommandScheduler.getInstance().setDefaultCommand(climber, stopClimber);
+    //CommandScheduler.getInstance().setDefaultCommand(intake, stopIntake);
+    //CommandScheduler.getInstance().setDefaultCommand(hopper, stopHopper);
+    //CommandScheduler.getInstance().setDefaultCommand(climber, stopClimber);
   }
 
   @Override
