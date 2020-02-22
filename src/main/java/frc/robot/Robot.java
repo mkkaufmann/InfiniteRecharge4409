@@ -17,7 +17,7 @@ import frc.robot.commands.IntakeStopCommand;
 import frc.robot.commands.HopperStopCommand;
 import frc.robot.commands.ClimberStopCommand;
 import frc.robot.subsystems.*;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -55,6 +55,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().registerSubsystem(flywheel);
     CommandScheduler.getInstance().registerSubsystem(climber);
     CommandScheduler.getInstance().registerSubsystem(hopper);
+    SmartDashboard.putNumber("Flywheel RPM", 0); 
   }
 
   @Override
@@ -73,13 +74,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-
-    //drivetrain.tankDrive(controller.getY(Hand.kLeft), controller.getY(Hand.kRight));
-
     //limelight.getLLdistance();
     if(Math.abs(controller.getTriggerAxis(Hand.kRight)) > 0.5){
       limelight.autoAim(drivetrain, controller.getY(Hand.kLeft));
     }else{
+        limelight.stop();
         drivetrain.cheesyDrive(controller.getY(Hand.kLeft), controller.getX(Hand.kRight), Math.abs(controller.getTriggerAxis(Hand.kLeft)) > 0.5);
     }
     if(controller.getXButtonPressed()){

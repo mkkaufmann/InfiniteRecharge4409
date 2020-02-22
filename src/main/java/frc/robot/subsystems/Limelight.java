@@ -29,10 +29,18 @@ public class Limelight extends SubsystemBase{
     public void periodic(){
         //System.out.println("Valid target: " + tv.getDouble(0.0));
         System.out.println("Horizontal offset: " + tx.getDouble(0.00123));
+        System.out.println("Distance est: " + heightDiff/(Math.tan(Math.toRadians(ty.getDouble(0.0)))+mountAngle));
         //System.out.println("Vertical offset: " + ty.getDouble(0.0));
         //System.out.println("Target area: " + ta.getDouble(0.0));
-        table.getEntry("ledMode").setNumber(3);
         
+    }
+
+    public void run(){
+        table.getEntry("ledMode").setNumber(3);
+    }
+
+    public void stop(){
+        table.getEntry("ledMode").setNumber(1);
     }
 
     public void getLLdistance(){
@@ -41,6 +49,7 @@ public class Limelight extends SubsystemBase{
     }
 
     public void autoAim(Drivetrain drivetrain, double drive){
+        run();
         prevYaw = curYaw;
         curYaw = tx.getDouble(0.00123);
         diffYaw = curYaw - prevYaw;
