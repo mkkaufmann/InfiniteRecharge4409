@@ -35,6 +35,10 @@ public class Limelight extends SubsystemBase{
         
     }
 
+    public double getOffset() {
+        
+    }
+
     public void run(){
         table.getEntry("ledMode").setNumber(3);
     }
