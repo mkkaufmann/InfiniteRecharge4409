@@ -83,7 +83,7 @@ public class Robot extends TimedRobot {
     limelight.run();
     if(Math.abs(controller.getTriggerAxis(Hand.kRight)) > 0.5){
       drivetrain.shift(false);
-      limelight.autoAim(drivetrain, controller.getY(Hand.kLeft));
+      limelight.autoAim(drivetrain, controller.getY(Hand.kRight));
     }else{
         //limelight.stop();
         double throttle = controller.getY(Hand.kRight);
@@ -107,13 +107,21 @@ public class Robot extends TimedRobot {
     else{
       climber.stop();
     }
-    if(partner.getBumper(Hand.kLeft)){
-      flywheel.runRPM(SmartDashboard.getNumber("Flywheel RPM", 0));
+    if(partner.getTriggerAxis(Hand.kLeft) > 0.5){
+      //flywheel.shootFromDistance(Math.abs(limelight.getLLdistance()));
+      flywheel.runRPM(3850);
     }else{
       flywheel.runRPM(0);
     }
     if(controller.getBumperPressed(Hand.kRight)){
       drivetrain.shift(!drivetrain.getHighGear());
+    }
+    if(Math.abs(partner.getTriggerAxis(Hand.kRight)) > 0.5){
+      hopper.feed(-0.4);
+    }else if(partner.getAButton()){
+      hopper.feed(0.4);
+    }else{
+      hopper.stop();
     }
   }
 

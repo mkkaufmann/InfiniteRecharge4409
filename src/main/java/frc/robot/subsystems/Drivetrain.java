@@ -90,12 +90,12 @@ public class Drivetrain extends SubsystemBase {
     if(toHighGear){
       gearRatio = HIGH_GEAR_RATIO;
       isHighGear = true;
-      shifter.set(DoubleSolenoid.Value.kForward);
+      shifter.set(DoubleSolenoid.Value.kReverse);
     }
     else{
       gearRatio = LOW_GEAR_RATIO;
       isHighGear = false;
-      shifter.set(DoubleSolenoid.Value.kReverse);
+      shifter.set(DoubleSolenoid.Value.kForward);
     }
   }
 

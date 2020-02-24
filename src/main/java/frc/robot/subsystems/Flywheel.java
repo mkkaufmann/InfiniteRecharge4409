@@ -22,6 +22,7 @@ public class Flywheel extends SubsystemBase {
     static final double MAX_PROJECTILE_VELOCITY_INCHES_PER_SECOND = MAX_FLYWEEL_VELOCITY_INCHES_PER_SECOND * SPEED_TRANSFER_TO_BALL;
     static final double VELOCITY_ERROR = 0.02;
     static final double HEIGHT_OF_TARGET_INCHES = 98.25;
+    static final double POOPY_SHOOT_RPM = 1000;
 
     TalonSRX flywheelMaster = new TalonSRX(7);
     VictorSPX flywheelFollower = new VictorSPX(8);
@@ -30,6 +31,7 @@ public class Flywheel extends SubsystemBase {
         flywheelMaster.setInverted(true);
         flywheelFollower.setInverted(true);
         flywheelFollower.follow(flywheelMaster);
+        flywheelMaster.configClosedloopRamp(1.5);
         flywheelMaster.config_kP(0, 40);
         flywheelMaster.config_kF(0, 2.78443113772);
         flywheelMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
@@ -74,9 +76,17 @@ public class Flywheel extends SubsystemBase {
         return projectileSpeed/SPEED_TRANSFER_TO_BALL; 
     }
 
+    public void shootFromDistance(double inches){
+        double rpm = -5.47*(inches*inches*inches)+0.0577*inches*inches-14.76*inches+4704.62;
+        runRPM(-Math.abs(rpm));
+    }
+
+    public void poopyshoot(){
+        runRPM(POOPY_SHOOT_RPM);
+    }
+
     @Override
     public void periodic(){
-
     }
 
 }

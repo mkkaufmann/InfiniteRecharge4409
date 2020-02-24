@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class Hopper extends SubsystemBase {
-    VictorSPX hopper = new VictorSPX(69);
+    VictorSPX hopper = new VictorSPX(10);
     public Hopper() {
 
     }
