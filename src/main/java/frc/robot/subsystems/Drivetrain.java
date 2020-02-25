@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.CheesyDriveHelper;
 import frc.robot.util.DriveSignal;
@@ -56,8 +57,6 @@ public class Drivetrain extends SubsystemBase {
 
   PIDController leftPIDController = new PIDController(Kp, Ki, Kd);
   PIDController rightPIDController = new PIDController(Kp, Ki, Kd);
-
-  Pose2d pose;
   
   PIDController leftController = new PIDController(0,0,0);
   PIDController rightController = new PIDController(0,0,0);
@@ -143,7 +142,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return pose;
+    return currentPose;
   }
 
   public boolean getHighGear(){
@@ -163,14 +162,26 @@ public class Drivetrain extends SubsystemBase {
       return rightPIDController;
   }
 
+  public CANSparkMax getLeftEncoder(){
+    return leftMaster;
+  }
+  public CANSparkMax getRightEncoder(){
+    return rightMaster;
+  }
+
+  public double getAngle(){
+    return navx.getAngle();
+  }
+
   @Override
   public void periodic(){
     System.out.println();
-    pose = odometry.update(getHeading(), getSpeeds().leftMetersPerSecond, getSpeeds().rightMetersPerSecond);
+    currentPose = odometry.update(getHeading(), getSpeeds().leftMetersPerSecond, getSpeeds().rightMetersPerSecond);
     
     
     //autoShift();
   }
+
 }
 
 
