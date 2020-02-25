@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 // import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 // import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.commands.IntakeStopCommand;
 import frc.robot.commands.HopperStopCommand;
 import frc.robot.RobotContainer.autonRoutine;
@@ -47,6 +48,7 @@ public class Robot extends TimedRobot {
    HopperStopCommand stopHopper = new HopperStopCommand(hopper);
    ClimberStopCommand stopClimber = new ClimberStopCommand(climber);
    Compressor compressor = new Compressor();
+   RamseteCommand command;
 
   @Override
   public void robotInit() {
@@ -65,12 +67,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+<<<<<<< HEAD
     container.getAutonomousCommand(drivetrain, autonRoutine.DRIVE_OFF_LINE);
+=======
+    command = container.getAutonomousCommand(drivetrain)
+    command.schedule();;
+
+>>>>>>> d02abbdb918a146066d5eb7e236c267570b83560
   }
 
   @Override
   public void autonomousPeriodic() {
     CommandScheduler.getInstance().run();
+    drivetrain.driveDistance(2);
   }
 
   @Override
