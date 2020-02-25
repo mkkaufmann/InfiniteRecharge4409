@@ -28,7 +28,7 @@ public class Limelight extends SubsystemBase{
     @Override
     public void periodic(){
         //System.out.println("Valid target: " + tv.getDouble(0.0));
-        System.out.println("Horizontal offset: " + tx.getDouble(0.00123));
+        System.out.println("Horizontal offset: " + tx.getDouble(0.00));
         System.out.println("Distance est: " + heightDiff/(Math.tan(Math.toRadians(ty.getDouble(0.0)))+mountAngle));
         System.out.println("Vertical offset: " + ty.getDouble(0.0));
         //System.out.println("Target area: " + ta.getDouble(0.0));
@@ -36,6 +36,7 @@ public class Limelight extends SubsystemBase{
     }
 
     public double getOffset() {
+        return tx.getDouble(0.00);
         
     }
 
@@ -55,7 +56,7 @@ public class Limelight extends SubsystemBase{
     public void autoAim(Drivetrain drivetrain, double drive){
         run();
         prevYaw = curYaw;
-        curYaw = tx.getDouble(0.0) + 1;
+        curYaw = tx.getDouble(0.0);
         diffYaw = curYaw - prevYaw;
         totalError += diffYaw;
         if(Math.abs(curYaw) < .25)
