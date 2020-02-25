@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.IntakeStopCommand;
 import frc.robot.commands.HopperStopCommand;
+import frc.robot.RobotContainer.autonRoutine;
 import frc.robot.commands.ClimberStopCommand;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -64,7 +65,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    container.getAutonomousCommand(drivetrain);
+    container.getAutonomousCommand(drivetrain, autonRoutine.DRIVE_OFF_LINE);
   }
 
   @Override
