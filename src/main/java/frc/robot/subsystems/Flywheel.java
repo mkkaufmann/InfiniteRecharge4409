@@ -85,6 +85,14 @@ public class Flywheel extends SubsystemBase {
         runRPM(POOPY_SHOOT_RPM);
     }
 
+    public double getRPM(){
+        return flywheelMaster.getSelectedSensorVelocity()/ENCODER_TICKS_PER_FLYWHEEL_REVOLUTION/GEARBOX_RATIO*600;
+    }
+
+    public double getDistanceRPM(double inches){
+        return -5.47*(inches*inches*inches)+0.0577*inches*inches-14.76*inches+4704.62;
+    }
+
     @Override
     public void periodic(){
     }

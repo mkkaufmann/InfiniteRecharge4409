@@ -36,6 +36,8 @@ public class DrivetrainDriveForwardCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    //return (drivetrain.getLeftEncoder()-);
+    return (drivetrain.getLeftEncoder().getEncoder().getPosition() 
+          + drivetrain.getRightEncoder().getEncoder().getPosition())/(20.054 * 2)
+          -(leftEncoderInit + rightEncoderInit)/2 > distance;
   }
 }

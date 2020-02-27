@@ -18,8 +18,10 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.commands.IntakeStopCommand;
 import frc.robot.commands.HopperStopCommand;
 import frc.robot.commands.ClimberStopCommand;
+import frc.robot.commands.DrivetrainDriveForwardCommand;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -47,7 +49,7 @@ public class Robot extends TimedRobot {
    HopperStopCommand stopHopper = new HopperStopCommand(hopper);
    ClimberStopCommand stopClimber = new ClimberStopCommand(climber);
    Compressor compressor = new Compressor();
-   RamseteCommand command;
+   Command command;
 
   @Override
   public void robotInit() {
@@ -66,15 +68,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    command = container.getAutonomousCommand(drivetrain)
-    command.schedule();;
+    //command = container.getAutonomousCommand(drivetrain);
+    command = new DrivetrainDriveForwardCommand(drivetrain, 2);
+    command.schedule();
 
   }
 
   @Override
   public void autonomousPeriodic() {
     CommandScheduler.getInstance().run();
-    drivetrain.driveDistance(2);
+    
   }
 
   @Override
