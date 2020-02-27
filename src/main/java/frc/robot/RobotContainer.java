@@ -1,5 +1,6 @@
 package frc.robot;
 
+import frc.robot.commands.DrivetrainDriveForwardCommand;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
@@ -11,52 +12,76 @@ import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-public class RobotContainer {
+import frc.robot.commands.LimelightAimCommand;
+import frc.robot.commands.FlywheelShootCommand;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hopper;
 
+public class RobotContainer {
+  private Limelight limelight = new Limelight();
+  private Flywheel flywheel = new Flywheel();
+  private Hopper hopper = new Hopper();
+  private Drivetrain drivetrain = new Drivetrain();
+
+  public Drivetrain getDrivetrain(){
+    return drivetrain;
+  }
+  public Limelight getLimelight(){
+    return limelight;
+  }
+  public Flywheel getFlywheel(){
+    return flywheel;
+  }
+  public Hopper getHopper(){
+    return hopper;
+  }
   public enum autonRoutine{
     DRIVE_OFF_LINE,
-    DRIVE_OFF_LINE_AND_SHOOT
+    DRIVE_OFF_LINE_AND_SHOOT,
+    PUSH_TEAM_OFF_LINE
   }
-  public Command getAutonomousCommand(Drivetrain drive, autonRoutine routine) {
+  public Command getAutonomousCommand(autonRoutine routine) {
+    Command command;
+
     TrajectoryConfig config = new TrajectoryConfig(2, 2);
-    config.setKinematics(drive.getKinematics());
+    config.setKinematics(drivetrain.getKinematics());
 
     Trajectory trajectory;
     switch(routine){
       case DRIVE_OFF_LINE:
-        trajectory = TrajectoryGenerator.generateTrajectory(
-        Arrays.asList(new Pose2d(), new Pose2d(1.0, 0, new Rotation2d())),
-        config
-      );
+        command = new DrivetrainDriveForwardCommand(drivetrain, -5);
         break;
       case DRIVE_OFF_LINE_AND_SHOOT:
-        trajectory = TrajectoryGenerator.generateTrajectory(
-          Arrays.asList(new Pose2d(7.763067665761969,-7.60015061618154, new Rotation2d()), new Pose2d(10.442660926842251,-5.948070560477909, new Rotation2d())),
-          config
-        );
+        command = new DrivetrainDriveForwardCommand(drivetrain, -5)
+        .andThen(new LimelightAimCommand(limelight, drivetrain).withTimeout(3)
+        .andThen(new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5)));
         break;
+      case PUSH_TEAM_OFF_LINE:
+        command = new DrivetrainDriveForwardCommand(drivetrain, 6)
+        .andThen(new DrivetrainDriveForwardCommand(drivetrain, -12));
         default:
         trajectory = TrajectoryGenerator.generateTrajectory(
-          Arrays.asList(new Pose2d(), new Pose2d(0, 0, new Rotation2d())),
+          Arrays.asList(new Pose2d(), new Pose2d(1.0, 0, new Rotation2d())),
           config
+        );
+        command = new RamseteCommand(
+          trajectory,
+          drivetrain::getPose,
+          new RamseteController(),
+          drivetrain.getFeedForward(),
+          drivetrain.getKinematics(),
+          drivetrain::getSpeeds,
+          drivetrain.getleftPIDController(),
+          drivetrain.getrightPIDController(),
+          drivetrain::setOutput,
+          drivetrain
         );
     }
     
 
 
 
-    RamseteCommand command = new RamseteCommand(
-      trajectory,
-      drive::getPose,
-      new RamseteController(),
-      drive.getFeedForward(),
-      drive.getKinematics(),
-      drive::getSpeeds,
-      drive.getleftPIDController(),
-      drive.getrightPIDController(),
-      drive::setOutput,
-      drive
-    );
+    
     return command;
   }
 };

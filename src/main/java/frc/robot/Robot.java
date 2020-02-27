@@ -36,16 +36,15 @@ public class Robot extends TimedRobot {
    * for any initialization code.
    */
 
-
-   Flywheel flywheel = new Flywheel();
-   Limelight limelight = new Limelight();
+   RobotContainer container = new RobotContainer();
+   Limelight limelight = container.getLimelight();
+   Flywheel flywheel = container.getFlywheel();
    Drivetrain drivetrain = new Drivetrain();
    XboxController controller = new XboxController(0);
    XboxController partner = new XboxController(1);
    Intake intake = new Intake();
    Climber climber = new Climber();
-   Hopper hopper = new Hopper();
-   RobotContainer container = new RobotContainer();
+   Hopper hopper = container.getHopper();
    IntakeStopCommand stopIntake = new IntakeStopCommand(intake);
    HopperStopCommand stopHopper = new HopperStopCommand(hopper);
    ClimberStopCommand stopClimber = new ClimberStopCommand(climber);
@@ -69,7 +68,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    command = container.getAutonomousCommand(drivetrain, autonRoutine.DRIVE_OFF_LINE);
+    command = container.getAutonomousCommand(autonRoutine.DRIVE_OFF_LINE);
     command.schedule();
   }
 

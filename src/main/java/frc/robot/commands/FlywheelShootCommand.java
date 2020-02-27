@@ -4,24 +4,24 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Limelight;
 
 public class FlywheelShootCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final Flywheel flywheel;
   private final Hopper hopper;
-  private double distance;
+  private final Limelight limelight;
   private double timer;
-  private double time;
+
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public FlywheelShootCommand(Flywheel _flywheel, Hopper _hopper, double _distance, double _time) {
+  public FlywheelShootCommand(Flywheel _flywheel, Hopper _hopper, Limelight _limelight) {
       flywheel = _flywheel;
-      distance = _distance;
+      limelight = _limelight;
       hopper = _hopper;
-      time = _time;
       // Use addRequirements() here to declare subsystem dependencies.
       addRequirements(flywheel);
     }
@@ -32,8 +32,8 @@ public class FlywheelShootCommand extends CommandBase {
 
   @Override
   public void execute(){
-      flywheel.shootFromDistance(distance);
-      if(flywheel.getRPM() > flywheel.getDistanceRPM(distance)*.95){
+      flywheel.shootFromDistance(limelight.getLLdistance());
+      if(flywheel.getRPM() > flywheel.getDistanceRPM(limelight.getLLdistance())*.95){
           hopper.feed(-.4);
           timer = DriverStation.getInstance().getMatchTime();
       }
@@ -41,6 +41,6 @@ public class FlywheelShootCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return DriverStation.getInstance().getMatchTime() - timer >= time;
+    return false;
   }
 }
