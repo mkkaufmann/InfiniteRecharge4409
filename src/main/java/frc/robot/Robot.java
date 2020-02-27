@@ -69,19 +69,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-<<<<<<< HEAD
-    //command = container.getAutonomousCommand(drivetrain);
-    command = new DrivetrainDriveForwardCommand(drivetrain, 2);
+    command = container.getAutonomousCommand(drivetrain, autonRoutine.DRIVE_OFF_LINE);
     command.schedule();
-=======
-<<<<<<< HEAD
-    container.getAutonomousCommand(drivetrain, autonRoutine.DRIVE_OFF_LINE);
-=======
-    command = container.getAutonomousCommand(drivetrain)
-    command.schedule();;
->>>>>>> 2fc5eb6728eb0ed51d55eb6613138d8a5c176f25
-
->>>>>>> d02abbdb918a146066d5eb7e236c267570b83560
   }
 
   @Override
