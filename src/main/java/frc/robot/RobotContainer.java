@@ -2,6 +2,7 @@ package frc.robot;
 
 import frc.robot.commands.DrivetrainDriveForwardCommand;
 import frc.robot.commands.DrivetrainTurnCommand;
+import frc.robot.commands.DrivetrainTurnPIDCommand;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
@@ -72,7 +73,8 @@ public class RobotContainer {
         break;
       case PICK_UP_TWO_AND_SHOOT:
         command = new IntakeIntakeCommand(intake)
-        .alongWith(new DrivetrainDriveForwardCommand(drivetrain, -1, 0.5)).andThen(new DrivetrainDriveForwardCommand(drivetrain, 12, 0.5)).andThen(new DrivetrainTurnCommand(drivetrain, 180)).andThen(new LimelightAimCommand(limelight, drivetrain)).andThen(new FlywheelShootCommand(flywheel, hopper, limelight));
+        .alongWith(new DrivetrainDriveForwardCommand(drivetrain, -1, 0.5)).andThen(new DrivetrainDriveForwardCommand(drivetrain, 12, 0.5)).andThen(new DrivetrainTurnPIDCommand(drivetrain, 180)).andThen(new LimelightAimCommand(limelight, drivetrain)).andThen(new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5));
+        break;
       default:
         trajectory = TrajectoryGenerator.generateTrajectory(
           Arrays.asList(new Pose2d(), new Pose2d(1.0, 0, new Rotation2d())),

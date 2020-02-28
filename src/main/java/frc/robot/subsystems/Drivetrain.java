@@ -173,6 +173,25 @@ public class Drivetrain extends SubsystemBase {
     return navx.getAngle();
   }
 
+  double curYaw;
+  double prevYaw;
+  double diffYaw;
+  double totalError;
+  static final double kP = -1.5/25.0;
+  static final double kI = -0.0;
+  static final double kD = -0;
+
+  public void turnAnglePID(double targetAngle){
+        prevYaw = curYaw;
+        curYaw = targetAngle - getAngle();
+        diffYaw = curYaw - prevYaw;
+        totalError += diffYaw;
+        if(Math.abs(curYaw) < .25)
+            totalError = 0;
+        double steering = curYaw * kP + diffYaw * kD + totalError * kI;
+        cheesyDrive(0, steering, true);
+  }
+
   @Override
   public void periodic(){
     System.out.println();
