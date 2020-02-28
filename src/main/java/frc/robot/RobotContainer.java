@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.commands.LimelightAimCommand;
 import frc.robot.commands.FlywheelShootCommand;
+import frc.robot.commands.IntakeIntakeCommand;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
 
@@ -22,6 +23,7 @@ public class RobotContainer {
   private Flywheel flywheel = new Flywheel();
   private Hopper hopper = new Hopper();
   private Drivetrain drivetrain = new Drivetrain();
+  private Intake intake = new Intake();
 
   public Drivetrain getDrivetrain(){
     return drivetrain;
@@ -38,7 +40,9 @@ public class RobotContainer {
   public enum autonRoutine{
     DRIVE_OFF_LINE,
     DRIVE_OFF_LINE_AND_SHOOT,
-    PUSH_TEAM_OFF_LINE
+    PUSH_TEAM_OFF_LINE,
+    PUSH_OFF_LINE_AND_SHOOT,
+    PICK_UP_TWO_AND_SHOOT
   }
   public Command getAutonomousCommand(autonRoutine routine) {
     Command command;
@@ -59,6 +63,16 @@ public class RobotContainer {
       case PUSH_TEAM_OFF_LINE:
         command = new DrivetrainDriveForwardCommand(drivetrain, 6)
         .andThen(new DrivetrainDriveForwardCommand(drivetrain, -12));
+        break;
+      case PUSH_OFF_LINE_AND_SHOOT:
+        command = new DrivetrainDriveForwardCommand(drivetrain, 1)
+        .andThen(new DrivetrainDriveForwardCommand(drivetrain, -6))
+        .andThen(new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5));
+        break;
+      case PICK_UP_TWO_AND_SHOOT:
+        command = new IntakeIntakeCommand(intake)
+        .alongWith(new DrivetrainDriveForwardCommand(drivetrain, 0))
+        
         default:
         trajectory = TrajectoryGenerator.generateTrajectory(
           Arrays.asList(new Pose2d(), new Pose2d(1.0, 0, new Rotation2d())),
