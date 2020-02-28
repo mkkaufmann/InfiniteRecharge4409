@@ -9,15 +9,21 @@ public class DrivetrainDriveForwardCommand extends CommandBase {
   private final double distance;
   private double leftEncoderInit;
   private double rightEncoderInit;
+  private final double speed;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DrivetrainDriveForwardCommand(Drivetrain _drivetrain, double _distance) {
+  public DrivetrainDriveForwardCommand(Drivetrain _drivetrain, double _distance, double _speed) {
       drivetrain = _drivetrain;
       distance = _distance;
+      if(distance >=0){
+        speed = _speed;
+      }else{
+        speed = -_speed;
+      }
       // Use addRequirements() here to declare subsystem dependencies.
       addRequirements(drivetrain);
     }
@@ -30,14 +36,20 @@ public class DrivetrainDriveForwardCommand extends CommandBase {
   @Override
   public void execute(){
     drivetrain.shift(false);
-    drivetrain.cheesyDrive(.25, drivetrain.getAngle()/15.0, false);
+    drivetrain.cheesyDrive(speed, drivetrain.getAngle()/15.0, false);
 
   }
 
   @Override
   public boolean isFinished() {
+    if(speed >= 0){
     return (drivetrain.getLeftEncoder().getEncoder().getPosition() 
           + drivetrain.getRightEncoder().getEncoder().getPosition())/(20.054 * 2)
           -(leftEncoderInit + rightEncoderInit)/2 > distance;
+    }else{
+    return (drivetrain.getLeftEncoder().getEncoder().getPosition() 
+          + drivetrain.getRightEncoder().getEncoder().getPosition())/(20.054 * 2)
+          -(leftEncoderInit + rightEncoderInit)/2 < distance;
+    }
   }
 }
