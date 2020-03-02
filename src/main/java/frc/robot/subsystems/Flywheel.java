@@ -38,13 +38,13 @@ public class Flywheel extends SubsystemBase {
     }
 
     public void runFlywheel(double output){
-        System.out.println("Encoder position" + flywheelMaster.getSelectedSensorPosition());
+        //System.out.println("Encoder position" + flywheelMaster.getSelectedSensorPosition());
         flywheelMaster.set(ControlMode.PercentOutput, output);
     }
 
     private void runVelocity(double velocity){
-        System.out.println("Encoder velocity" + (flywheelMaster.getSelectedSensorVelocity()));
-        System.out.println("Encoder difference from velocity " + (Math.abs(velocity) - (Math.abs(flywheelMaster.getSelectedSensorVelocity()))));
+        //System.out.println("Encoder velocity" + (flywheelMaster.getSelectedSensorVelocity()));
+        //System.out.println("Encoder difference from velocity " + (Math.abs(velocity) - (Math.abs(flywheelMaster.getSelectedSensorVelocity()))));
         flywheelMaster.set(ControlMode.Velocity, velocity);
     }
 

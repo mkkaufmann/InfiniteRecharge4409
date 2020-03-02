@@ -39,10 +39,10 @@ public class Robot extends TimedRobot {
    RobotContainer container = new RobotContainer();
    Limelight limelight = container.getLimelight();
    Flywheel flywheel = container.getFlywheel();
-   Drivetrain drivetrain = new Drivetrain();
+   Drivetrain drivetrain = container.getDrivetrain();
    XboxController controller = new XboxController(0);
    XboxController partner = new XboxController(1);
-   Intake intake = new Intake();
+   Intake intake = container.getIntake();
    Climber climber = new Climber();
    Hopper hopper = container.getHopper();
    IntakeStopCommand stopIntake = new IntakeStopCommand(intake);
@@ -68,18 +68,20 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    command = container.getAutonomousCommand(autonRoutine.DRIVE_OFF_LINE);
-    command.schedule();
+    intake.deploy();
+    //command = container.getAutonomousCommand(autonRoutine.DRIVE_OFF_LINE);
+    //command.schedule();
   }
 
   @Override
   public void autonomousPeriodic() {
-    CommandScheduler.getInstance().run();
+    //CommandScheduler.getInstance().run();
     
   }
 
   @Override
   public void teleopInit() {
+    intake.deploy();
   }
 
   @Override
@@ -113,9 +115,9 @@ public class Robot extends TimedRobot {
     else{
       climber.stop();
     }
-    if(partner.getTriggerAxis(Hand.kLeft) > 0.5){
+    if(partner.getBumper(Hand.kLeft)){
       //flywheel.shootFromDistance(Math.abs(limelight.getLLdistance()));
-      flywheel.runRPM(3850);
+      flywheel.runRPM(4100);
     }else{
       flywheel.runRPM(0);
     }
@@ -133,9 +135,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+    intake.reset();
   }
 
   @Override
   public void testPeriodic() {
+    intake.reset();
   }
 }

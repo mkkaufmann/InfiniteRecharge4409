@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
     VictorSPX intake = new VictorSPX(9);
-    DoubleSolenoid pusherOuter = new DoubleSolenoid(4, 3);
+    DoubleSolenoid pusherOuter = new DoubleSolenoid(3, 4);
     boolean isOut = false;
     public Intake() {
 
@@ -25,5 +25,8 @@ public class Intake extends SubsystemBase {
     }
     public void deploy() {
         pusherOuter.set(DoubleSolenoid.Value.kForward);
+    }
+    public void reset() {
+        pusherOuter.set(DoubleSolenoid.Value.kReverse);
     }
 }

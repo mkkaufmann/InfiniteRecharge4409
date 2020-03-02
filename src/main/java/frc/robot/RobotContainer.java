@@ -39,6 +39,9 @@ public class RobotContainer {
   public Hopper getHopper(){
     return hopper;
   }
+  public Intake getIntake(){
+    return intake;
+  }
   public enum autonRoutine{
     DRIVE_OFF_LINE,
     DRIVE_OFF_LINE_AND_SHOOT,

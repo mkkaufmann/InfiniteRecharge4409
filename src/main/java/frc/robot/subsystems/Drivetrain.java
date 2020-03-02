@@ -194,7 +194,6 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic(){
-    System.out.println();
     currentPose = odometry.update(getHeading(), getSpeeds().leftMetersPerSecond, getSpeeds().rightMetersPerSecond);
     
     
