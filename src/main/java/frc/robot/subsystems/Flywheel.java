@@ -77,8 +77,8 @@ public class Flywheel extends SubsystemBase {
     }
 
     public void shootFromDistance(double inches){
-        double rpm = -5.47*(inches*inches*inches)+0.0577*inches*inches-14.76*inches+4704.62;
-        runRPM(-Math.abs(rpm));
+        double rpm = -5.47/100000*(inches*inches*inches)+0.0577*inches*inches-14.76*inches+4704.62;
+        runRPM(Math.abs(rpm));
     }
 
     public void poopyshoot(){
@@ -90,7 +90,7 @@ public class Flywheel extends SubsystemBase {
     }
 
     public double getDistanceRPM(double inches){
-        return -5.47*(inches*inches*inches)+0.0577*inches*inches-14.76*inches+4704.62;
+        return -5.47/100000*(inches*inches*inches)+0.0577*inches*inches-14.76*inches+4704.62;
     }
 
     @Override

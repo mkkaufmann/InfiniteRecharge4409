@@ -83,6 +83,9 @@ public class Drivetrain extends SubsystemBase {
     leftSlave2.follow(leftMaster);
     rightSlave1.follow(rightMaster);
     rightSlave2.follow(rightMaster);
+
+    leftMaster.setOpenLoopRampRate(0.33);
+    rightMaster.setOpenLoopRampRate(0.33);
   }
   
   public void shift(boolean toHighGear) {
@@ -153,6 +156,12 @@ public class Drivetrain extends SubsystemBase {
     leftMaster.set(leftVolts / OUTPUT_VOLTS);
     rightMaster.set(rightVolts / OUTPUT_VOLTS);
   }
+
+  public void tankDrive(double left, double right) {
+    leftMaster.set(left);
+    rightMaster.set(right);
+  }
+
 
   public PIDController getleftPIDController() {
       return leftPIDController;

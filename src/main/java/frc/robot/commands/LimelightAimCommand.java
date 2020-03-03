@@ -31,7 +31,7 @@ public class LimelightAimCommand extends CommandBase {
 
   @Override
   public void execute() {
-    limelight.autoAim(drivetrain, 0);
+    limelight.autoAim(drivetrain);
   }
 
   @Override

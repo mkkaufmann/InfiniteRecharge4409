@@ -7,13 +7,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase{
 
-    static final double kP = -1.5/25.0;
+    static final double kP = -0.02;
     static final double kI = -0.0;
     static final double kD = -0;
     static final double goalHeightMid = 89;
     static final double mountHeight = 24.375;
     static final double heightDiff = goalHeightMid-mountHeight;
-    static final double mountAngle = Math.toRadians(0);
+    static final double mountAngle = Math.toRadians(29.2);
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     NetworkTableEntry tv = table.getEntry("tv");
     NetworkTableEntry tx = table.getEntry("tx");
@@ -53,20 +53,17 @@ public class Limelight extends SubsystemBase{
         return heightDiff/(Math.tan(Math.toRadians(ty.getDouble(0.0)))+mountAngle);
     }
 
-    public void autoAim(Drivetrain drivetrain, double drive){
+    public void autoAim(Drivetrain drivetrain){
         run();
         prevYaw = curYaw;
-        curYaw = tx.getDouble(0.0);
+        curYaw = tx.getDouble(0.0) - 2;
         diffYaw = curYaw - prevYaw;
         totalError += diffYaw;
         if(Math.abs(curYaw) < .25)
             totalError = 0;
-        double steering = tx.getDouble(0.00123) * kP + diffYaw * kD + totalError * kI;
-        if(Math.abs(drive) >= 0.1){
-            drivetrain.cheesyDrive(drive, steering, false);
-        }else{
-            drivetrain.cheesyDrive(0, steering, true);
-        }
+        double steering = curYaw * kP + diffYaw * kD + totalError * kI;
+        drivetrain.cheesyDrive(0, steering, true);
+        
     }
 
 }

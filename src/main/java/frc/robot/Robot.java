@@ -91,11 +91,19 @@ public class Robot extends TimedRobot {
     limelight.run();
     if(Math.abs(controller.getTriggerAxis(Hand.kRight)) > 0.5){
       drivetrain.shift(false);
-      limelight.autoAim(drivetrain, controller.getY(Hand.kRight));
+      limelight.autoAim(drivetrain);
     }else{
         //limelight.stop();
-        double throttle = controller.getY(Hand.kRight);
-        drivetrain.cheesyDrive(throttle, -controller.getX(Hand.kLeft), Math.abs(controller.getTriggerAxis(Hand.kLeft)) > 0.5 || Math.abs(throttle) < 0.1);
+        double yLeft = controller.getX(Hand.kLeft);
+        double yRight = controller.getY(Hand.kRight);
+
+        if(Math.abs(yLeft) < .1)
+          yLeft = 0;
+        if(Math.abs(yRight) < .1)
+          yRight = 0;
+
+        //drivetrain.tankDrive(yLeft, yRight);
+        drivetrain.cheesyDrive(yRight, -yLeft, Math.abs(controller.getTriggerAxis(Hand.kLeft)) > 0.5 || Math.abs(yRight) < 0.1);
     }
     if(partner.getXButton()){
       intake.intake();
@@ -116,8 +124,7 @@ public class Robot extends TimedRobot {
       climber.stop();
     }
     if(partner.getBumper(Hand.kLeft)){
-      //flywheel.shootFromDistance(Math.abs(limelight.getLLdistance()));
-      flywheel.runRPM(4100);
+      flywheel.shootFromDistance(Math.abs(limelight.getLLdistance()));
     }else{
       flywheel.runRPM(0);
     }
