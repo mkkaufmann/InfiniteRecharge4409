@@ -68,8 +68,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    drivetrain.getLeftEncoder().getEncoder().setPosition(0);
-    drivetrain.getRightEncoder().getEncoder().setPosition(0);
+    drivetrain.resetEncoders();
     intake.deploy();
     command = container.getAutonomousCommand(autonRoutine.DRIVE_OFF_LINE);
     command.schedule();
@@ -78,7 +77,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     //drivetrain.cheesyDrive(.25, 0, false);
-    System.out.println(drivetrain.getLeftEncoder().getEncoder().getPosition() + "left right" + drivetrain.getRightEncoder().getEncoder().getPosition());
+    System.out.println(drivetrain.getLeftEncoderValue()+ "left right" + drivetrain.getRightEncoderValue());
     CommandScheduler.getInstance().run();
     
   }
