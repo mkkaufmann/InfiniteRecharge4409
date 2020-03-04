@@ -7,6 +7,7 @@ import frc.robot.util.DriveSignal;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.geometry.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -58,9 +59,6 @@ public class Drivetrain extends SubsystemBase {
   PIDController leftPIDController = new PIDController(Kp, Ki, Kd);
   PIDController rightPIDController = new PIDController(Kp, Ki, Kd);
   
-  PIDController leftController = new PIDController(0,0,0);
-  PIDController rightController = new PIDController(0,0,0);
-
   CheesyDriveHelper cheesyDriveHelper = new CheesyDriveHelper();
 
   public Rotation2d getHeading(){
@@ -204,7 +202,7 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic(){
     currentPose = odometry.update(getHeading(), getSpeeds().leftMetersPerSecond, getSpeeds().rightMetersPerSecond);
-    
+    SmartDashboard.putBoolean("High Gear", isHighGear);
     
     //autoShift();
   }

@@ -92,21 +92,22 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
     //limelight.getLLdistance();
-    if(Math.abs(controller.getTriggerAxis(Hand.kRight)) > 0.5){
+    boolean autoAim = Math.abs(controller.getTriggerAxis(Hand.kRight)) > 0.5;
+    if(autoAim){
       drivetrain.shift(false);
       limelight.autoAim(drivetrain);
     }else{
-        limelight.stop();
-        double yLeft = controller.getY(Hand.kLeft);
-        double yRight = controller.getY(Hand.kRight);
+        //limelight.stop();
+        double yLeft = -controller.getX(Hand.kLeft);
+        double yRight = -controller.getY(Hand.kRight);
 
         if(Math.abs(yLeft) < .1)
           yLeft = 0;
         if(Math.abs(yRight) < .1)
           yRight = 0;
 
-        drivetrain.tankDrive(yLeft, yRight);
-        //drivetrain.cheesyDrive(yRight, -yLeft, Math.abs(controller.getTriggerAxis(Hand.kLeft)) > 0.5 || Math.abs(yRight) < 0.1);
+        // drivetrain.tankDrive(yLeft, yRight);
+        drivetrain.cheesyDrive(yRight, -yLeft, Math.abs(controller.getTriggerAxis(Hand.kLeft)) > 0.5 || Math.abs(yRight) < 0.1);
     }
     if(partner.getXButton()){
       intake.intake();
@@ -126,12 +127,15 @@ public class Robot extends TimedRobot {
     else{
       climber.stop();
     }
-    if(partner.getBumper(Hand.kLeft)){
-      limelight.run();
+    boolean runFlywheel = Math.abs(partner.getTriggerAxis(Hand.kLeft))>0.5;
+    if(runFlywheel){
+      //limelight.run();
       flywheel.shootFromDistance(Math.abs(limelight.getLLdistance()));
+    }else if(partner.getBumper(Hand.kLeft)){
+      flywheel.poopyshoot();
     }else{
       flywheel.runRPM(0);
-      limelight.stop();
+      //limelight.stop();
     }
     if(controller.getBumperPressed(Hand.kRight)){
       drivetrain.shift(!drivetrain.getHighGear());
@@ -142,6 +146,11 @@ public class Robot extends TimedRobot {
       hopper.feed(0.4);
     }else{
       hopper.stop();
+    }
+    if(runFlywheel || autoAim){
+      limelight.run();
+    }else{
+      limelight.stop();
     }
   }
 

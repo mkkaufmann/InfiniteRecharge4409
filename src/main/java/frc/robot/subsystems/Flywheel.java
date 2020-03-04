@@ -3,7 +3,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+import frc.robot.util.Utilities;
 
 
 public class Flywheel extends SubsystemBase {
@@ -23,6 +27,8 @@ public class Flywheel extends SubsystemBase {
     static final double VELOCITY_ERROR = 0.02;
     static final double HEIGHT_OF_TARGET_INCHES = 98.25;
     static final double POOPY_SHOOT_RPM = 1000;
+    double rpm = 0;
+    
 
     TalonSRX flywheelMaster = new TalonSRX(7);
     VictorSPX flywheelFollower = new VictorSPX(8);
@@ -35,6 +41,8 @@ public class Flywheel extends SubsystemBase {
         flywheelMaster.config_kP(0, 40);
         flywheelMaster.config_kF(0, 2.78443113772);
         flywheelMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+        SmartDashboard.putNumber("RPM Percentage", 0);
+        SmartDashboard.putBoolean("RPM Ready", false);
     }
 
     public void runFlywheel(double output){
@@ -52,7 +60,8 @@ public class Flywheel extends SubsystemBase {
         runVelocity(rotationsPer100ms * ENCODER_TICKS_PER_FLYWHEEL_REVOLUTION);
     }
 
-    public void runRPM(double rpm){
+    public void runRPM(double _rpm){
+        rpm = _rpm;
         runRotationsPer100ms(rpmToRotationsPer100ms(rpm));
     }
 
@@ -77,7 +86,8 @@ public class Flywheel extends SubsystemBase {
     }
 
     public void shootFromDistance(double inches){
-        double rpm = -5.47/100000*(inches*inches*inches)+0.0577*inches*inches-14.76*inches+4704.62;
+        rpm = Math.abs(-5.47/100000*(inches*inches*inches)+0.0577*inches*inches-14.76*inches+4704.62);
+        
         runRPM(Math.abs(rpm));
     }
 
@@ -86,7 +96,7 @@ public class Flywheel extends SubsystemBase {
     }
 
     public double getRPM(){
-        return flywheelMaster.getSelectedSensorVelocity()/ENCODER_TICKS_PER_FLYWHEEL_REVOLUTION/GEARBOX_RATIO*600;
+        return flywheelMaster.getSelectedSensorVelocity()/ENCODER_TICKS_PER_FLYWHEEL_REVOLUTION*600;
     }
 
     public double getDistanceRPM(double inches){
@@ -95,6 +105,8 @@ public class Flywheel extends SubsystemBase {
 
     @Override
     public void periodic(){
+        SmartDashboard.putNumber("RPM Percentage", getRPM()/rpm);
+        SmartDashboard.putBoolean("RPM Ready", Utilities.epsilonEquals(getRPM()/rpm, 1, 0.02) && Limelight.targetFound());
     }
 
 }

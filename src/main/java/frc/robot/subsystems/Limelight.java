@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase{
@@ -14,9 +15,9 @@ public class Limelight extends SubsystemBase{
     static final double mountHeight = 24.375;
     static final double heightDiff = goalHeightMid-mountHeight;
     static final double mountAngle = Math.toRadians(29.2);
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     NetworkTableEntry tv = table.getEntry("tv");
-    NetworkTableEntry tx = table.getEntry("tx");
+    static NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
     NetworkTableEntry ta = table.getEntry("ta");
 
@@ -28,6 +29,7 @@ public class Limelight extends SubsystemBase{
     @Override
     public void periodic(){
         //System.out.println("Valid target: " + tv.getDouble(0.0));
+        SmartDashboard.putNumber("Distance To Target", (int)getLLdistance());
         System.out.println("Horizontal offset: " + tx.getDouble(0.00));
         System.out.println("Distance est: " + heightDiff/(Math.tan(Math.toRadians(ty.getDouble(0.0)))+mountAngle));
         System.out.println("Vertical offset: " + ty.getDouble(0.0));
@@ -38,6 +40,10 @@ public class Limelight extends SubsystemBase{
     public double getOffset() {
         return tx.getDouble(0.00);
         
+    }
+
+    public static boolean targetFound(){
+        return tx.getDouble(0.0) != 0.0;
     }
 
     public void run(){
@@ -56,13 +62,13 @@ public class Limelight extends SubsystemBase{
     public void autoAim(Drivetrain drivetrain){
         run();
         prevYaw = curYaw;
-        curYaw = tx.getDouble(0.0) - 2;
+        curYaw = tx.getDouble(2.0) - 2;
         diffYaw = curYaw - prevYaw;
         totalError += diffYaw;
         if(Math.abs(curYaw) < .25)
             totalError = 0;
         double steering = curYaw * kP + diffYaw * kD + totalError * kI;
-        drivetrain.cheesyDrive(0, steering, true);
+        drivetrain.cheesyDrive(0, -steering, true);
         
     }
 
