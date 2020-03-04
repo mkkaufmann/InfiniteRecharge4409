@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.Utilities;
 
 public class DrivetrainDriveForwardCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
@@ -30,8 +31,8 @@ public class DrivetrainDriveForwardCommand extends CommandBase {
     }
   @Override
   public void initialize() {
-      leftEncoderInit = drivetrain.getLeftEncoder().getEncoder().getPosition()/404.285;
-      rightEncoderInit = drivetrain.getRightEncoder().getEncoder().getPosition()/404.285;
+      leftEncoderInit = drivetrain.getLeftEncoderValue()/404.285;
+      rightEncoderInit = drivetrain.getRightEncoderValue()/404.285;
       angle = drivetrain.getAngle();
   }
 
@@ -44,14 +45,8 @@ public class DrivetrainDriveForwardCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    if(speed >= 0){
-    return (drivetrain.getLeftEncoder().getEncoder().getPosition() 
-          + drivetrain.getRightEncoder().getEncoder().getPosition())/(404.285*2)
-          -(leftEncoderInit + rightEncoderInit)/2 > distance;
-    }else{
-    return (drivetrain.getLeftEncoder().getEncoder().getPosition() 
-          + drivetrain.getRightEncoder().getEncoder().getPosition())/(404.285*2)
-          -(leftEncoderInit + rightEncoderInit)/2 < distance;
-    }
+    double leftValue = drivetrain.getLeftEncoderValue()/404.285 - leftEncoderInit;
+    double rightValue = drivetrain.getRightEncoderValue()/404.285 - rightEncoderInit;
+    return Utilities.epsilonEquals((leftValue + rightValue)/2, 1);
   }
 }

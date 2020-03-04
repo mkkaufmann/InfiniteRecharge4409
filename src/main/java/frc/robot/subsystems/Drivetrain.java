@@ -58,6 +58,9 @@ public class Drivetrain extends SubsystemBase {
   PIDController leftPIDController = new PIDController(Kp, Ki, Kd);
   PIDController rightPIDController = new PIDController(Kp, Ki, Kd);
   
+  PIDController leftPIDCommandController = new PIDController(Kp, Ki, Kd);
+  PIDController rightPIDCommandController = new PIDController(Kp, Ki, Kd);
+
   PIDController leftController = new PIDController(0,0,0);
   PIDController rightController = new PIDController(0,0,0);
 
@@ -78,6 +81,9 @@ public class Drivetrain extends SubsystemBase {
     leftSlave2.setSmartCurrentLimit(25);
     rightSlave1.setSmartCurrentLimit(25);
     rightSlave2.setSmartCurrentLimit(25);
+
+    leftPIDCommandController.setTolerance(1);
+    rightPIDCommandController.setTolerance(1);
 
     leftSlave1.follow(leftMaster);
     leftSlave2.follow(leftMaster);
@@ -171,11 +177,24 @@ public class Drivetrain extends SubsystemBase {
       return rightPIDController;
   }
 
-  public CANSparkMax getLeftEncoder(){
-    return leftMaster;
+  public PIDController getLeftPIDCommandController() {
+      return leftPIDCommandController;
   }
-  public CANSparkMax getRightEncoder(){
-    return rightMaster;
+
+  public PIDController getRightPIDCommandController() {
+      return rightPIDCommandController;
+  }
+
+  public void resetEncoders(){
+    leftMaster.getEncoder().setPosition(0);
+    rightMaster.getEncoder().setPosition(0);
+  }
+
+  public double getLeftEncoderValue(){
+    return leftMaster.getEncoder().getPosition();
+  }
+  public double getRightEncoderValue(){
+    return rightMaster.getEncoder().getPosition();
   }
 
   public double getAngle(){
