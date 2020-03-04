@@ -68,14 +68,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    drivetrain.getLeftEncoder().getEncoder().setPosition(0);
+    drivetrain.getRightEncoder().getEncoder().setPosition(0);
     intake.deploy();
-    //command = container.getAutonomousCommand(autonRoutine.DRIVE_OFF_LINE);
-    //command.schedule();
+    command = container.getAutonomousCommand(autonRoutine.DRIVE_OFF_LINE);
+    command.schedule();
   }
 
   @Override
   public void autonomousPeriodic() {
-    //CommandScheduler.getInstance().run();
+    //drivetrain.cheesyDrive(.25, 0, false);
+    System.out.println(drivetrain.getLeftEncoder().getEncoder().getPosition() + "left right" + drivetrain.getRightEncoder().getEncoder().getPosition());
+    CommandScheduler.getInstance().run();
     
   }
 
@@ -88,13 +92,12 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
     //limelight.getLLdistance();
-    limelight.run();
     if(Math.abs(controller.getTriggerAxis(Hand.kRight)) > 0.5){
       drivetrain.shift(false);
       limelight.autoAim(drivetrain);
     }else{
-        //limelight.stop();
-        double yLeft = controller.getX(Hand.kLeft);
+        limelight.stop();
+        double yLeft = controller.getY(Hand.kLeft);
         double yRight = controller.getY(Hand.kRight);
 
         if(Math.abs(yLeft) < .1)
@@ -102,8 +105,8 @@ public class Robot extends TimedRobot {
         if(Math.abs(yRight) < .1)
           yRight = 0;
 
-        //drivetrain.tankDrive(yLeft, yRight);
-        drivetrain.cheesyDrive(yRight, -yLeft, Math.abs(controller.getTriggerAxis(Hand.kLeft)) > 0.5 || Math.abs(yRight) < 0.1);
+        drivetrain.tankDrive(yLeft, yRight);
+        //drivetrain.cheesyDrive(yRight, -yLeft, Math.abs(controller.getTriggerAxis(Hand.kLeft)) > 0.5 || Math.abs(yRight) < 0.1);
     }
     if(partner.getXButton()){
       intake.intake();
@@ -124,9 +127,11 @@ public class Robot extends TimedRobot {
       climber.stop();
     }
     if(partner.getBumper(Hand.kLeft)){
+      limelight.run();
       flywheel.shootFromDistance(Math.abs(limelight.getLLdistance()));
     }else{
       flywheel.runRPM(0);
+      limelight.stop();
     }
     if(controller.getBumperPressed(Hand.kRight)){
       drivetrain.shift(!drivetrain.getHighGear());

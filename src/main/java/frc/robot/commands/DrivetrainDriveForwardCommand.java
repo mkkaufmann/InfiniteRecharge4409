@@ -10,6 +10,7 @@ public class DrivetrainDriveForwardCommand extends CommandBase {
   private double leftEncoderInit;
   private double rightEncoderInit;
   private final double speed;
+  private double angle;
 
   /**
    * Creates a new ExampleCommand.
@@ -29,14 +30,15 @@ public class DrivetrainDriveForwardCommand extends CommandBase {
     }
   @Override
   public void initialize() {
-      leftEncoderInit = drivetrain.getLeftEncoder().getEncoder().getPosition()/20.054;
-      rightEncoderInit = drivetrain.getRightEncoder().getEncoder().getPosition()/20.054;
+      leftEncoderInit = drivetrain.getLeftEncoder().getEncoder().getPosition()/404.285;
+      rightEncoderInit = drivetrain.getRightEncoder().getEncoder().getPosition()/404.285;
+      angle = drivetrain.getAngle();
   }
 
   @Override
   public void execute(){
     drivetrain.shift(false);
-    drivetrain.cheesyDrive(speed, drivetrain.getAngle()/15.0, false);
+    drivetrain.cheesyDrive(speed, 0, false);
 
   }
 
@@ -44,11 +46,11 @@ public class DrivetrainDriveForwardCommand extends CommandBase {
   public boolean isFinished() {
     if(speed >= 0){
     return (drivetrain.getLeftEncoder().getEncoder().getPosition() 
-          + drivetrain.getRightEncoder().getEncoder().getPosition())/(20.054 * 2)
+          + drivetrain.getRightEncoder().getEncoder().getPosition())/(404.285*2)
           -(leftEncoderInit + rightEncoderInit)/2 > distance;
     }else{
     return (drivetrain.getLeftEncoder().getEncoder().getPosition() 
-          + drivetrain.getRightEncoder().getEncoder().getPosition())/(20.054 * 2)
+          + drivetrain.getRightEncoder().getEncoder().getPosition())/(404.285*2)
           -(leftEncoderInit + rightEncoderInit)/2 < distance;
     }
   }

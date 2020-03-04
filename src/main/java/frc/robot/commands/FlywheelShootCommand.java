@@ -11,7 +11,6 @@ public class FlywheelShootCommand extends CommandBase {
   private final Flywheel flywheel;
   private final Hopper hopper;
   private final Limelight limelight;
-  private double timer;
 
   /**
    * Creates a new ExampleCommand.
@@ -35,7 +34,6 @@ public class FlywheelShootCommand extends CommandBase {
       flywheel.shootFromDistance(limelight.getLLdistance());
       if(flywheel.getRPM() > flywheel.getDistanceRPM(limelight.getLLdistance())*.95){
           hopper.feed(-.4);
-          timer = DriverStation.getInstance().getMatchTime();
       }
   }
 

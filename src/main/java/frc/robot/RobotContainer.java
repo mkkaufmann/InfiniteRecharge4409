@@ -58,7 +58,7 @@ public class RobotContainer {
     Trajectory trajectory;
     switch(routine){
       case DRIVE_OFF_LINE:
-        command = new DrivetrainDriveForwardCommand(drivetrain, -5, 0.5);
+        command = new DrivetrainDriveForwardCommand(drivetrain, 1, 0.5);
         break;
       case DRIVE_OFF_LINE_AND_SHOOT:
         command = new DrivetrainDriveForwardCommand(drivetrain, -5, 0.5)

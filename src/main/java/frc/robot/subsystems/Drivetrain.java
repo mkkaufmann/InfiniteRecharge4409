@@ -68,8 +68,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public Drivetrain(){
-    leftMaster.setInverted(false);
-    rightMaster.setInverted(true);
+    leftMaster.setInverted(true);
+    rightMaster.setInverted(false);
 
     leftMaster.setSmartCurrentLimit(25);
     rightMaster.setSmartCurrentLimit(25);
