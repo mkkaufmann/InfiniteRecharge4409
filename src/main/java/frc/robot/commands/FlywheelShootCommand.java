@@ -23,6 +23,8 @@ public class FlywheelShootCommand extends CommandBase {
       hopper = _hopper;
       // Use addRequirements() here to declare subsystem dependencies.
       addRequirements(flywheel);
+      addRequirements(hopper);
+      addRequirements(limelight);
     }
   @Override
   public void initialize() {

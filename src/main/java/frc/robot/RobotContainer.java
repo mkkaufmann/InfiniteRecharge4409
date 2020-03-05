@@ -17,7 +17,10 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import frc.robot.commands.LimelightAimCommand;
 import frc.robot.commands.FlywheelShootCommand;
+import frc.robot.commands.FlywheelStopCommand;
+import frc.robot.commands.HopperStopCommand;
 import frc.robot.commands.IntakeIntakeCommand;
+import frc.robot.commands.IntakeStopCommand;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
 
@@ -64,30 +67,65 @@ public class RobotContainer {
     Trajectory trajectory;
     switch(routine){
       case TEST:
-        //command = new DriveForwardForTime(drivetrain, 0.25).withTimeout(1).andThen(stopDrive);
-        //command = new SequentialCommandGroup(new WaitCommand(1), new DriveForwardForTime(drivetrain, 0.25)).withTimeout(3);
-        command = (((((new DriveForwardForTime(drivetrain, -0.5).withTimeout(3)).andThen(new LimelightAimCommand(limelight, drivetrain)).withTimeout(2))).andThen(stopDrive)).andThen(new FlywheelShootCommand(flywheel, hopper, limelight)).withTimeout(5));
+        command = new SequentialCommandGroup(
+          new DriveForwardForTime(drivetrain, -0.5).withTimeout(3),
+          stopDrive,
+          new LimelightAimCommand(limelight, drivetrain).withTimeout(2),
+          stopDrive,
+          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5),
+          new FlywheelStopCommand(flywheel),
+          new HopperStopCommand(hopper)
+        );
         break;
       case DRIVE_OFF_LINE:
-      command = new DriveForwardForTime(drivetrain, 0.75).withTimeout(1).andThen(stopDrive);
+          command = new SequentialCommandGroup(
+            new DriveForwardForTime(drivetrain, 0.75).withTimeout(1),
+            stopDrive
+          );
         break;
       case DRIVE_OFF_LINE_AND_SHOOT:
-        command = new DrivetrainDriveForwardCommand(drivetrain, -5, 0.5).andThen(stopDrive)
-        .andThen(new LimelightAimCommand(limelight, drivetrain).withTimeout(3)
-        .andThen(new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5)));
+        command = new SequentialCommandGroup(
+          new DriveForwardForTime(drivetrain, -0.5).withTimeout(3),
+          stopDrive,
+          new LimelightAimCommand(limelight, drivetrain).withTimeout(2),
+          stopDrive,
+          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5),
+          new FlywheelStopCommand(flywheel),
+          new HopperStopCommand(hopper)
+        );
         break;
       case PUSH_TEAM_OFF_LINE:
-        command = new DrivetrainDriveForwardCommand(drivetrain, 6, 0.5)
-        .andThen(new DrivetrainDriveForwardCommand(drivetrain, -12, 0.5)).andThen(stopDrive);
+        command = new SequentialCommandGroup(
+          new DriveForwardForTime(drivetrain, 0.75).withTimeout(1),
+          new DriveForwardForTime(drivetrain, -0.75).withTimeout(2),
+          stopDrive
+        );
         break;
       case PUSH_OFF_LINE_AND_SHOOT:
-        command = new DrivetrainDriveForwardCommand(drivetrain, 1, 0.5)
-        .andThen(new DrivetrainDriveForwardCommand(drivetrain, -6, 0.5)).andThen(stopDrive)
-        .andThen(new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5));
+        command = new SequentialCommandGroup(
+          new DriveForwardForTime(drivetrain, 0.5).withTimeout(1),
+          new DriveForwardForTime(drivetrain, -0.5).withTimeout(3.5),
+          stopDrive,
+          new LimelightAimCommand(limelight, drivetrain).withTimeout(2),
+          stopDrive,
+          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5),
+          new FlywheelStopCommand(flywheel),
+          new HopperStopCommand(hopper)
+        );
         break;
       case PICK_UP_TWO_AND_SHOOT:
-        command = new IntakeIntakeCommand(intake)
-        .alongWith(new DrivetrainDriveForwardCommand(drivetrain, -1, 0.5)).andThen(new DrivetrainDriveForwardCommand(drivetrain, 12, 0.5)).andThen(stopDrive).andThen(new DrivetrainTurnPIDCommand(drivetrain, 180).withTimeout(2)).andThen(stopDrive).andThen(new LimelightAimCommand(limelight, drivetrain)).andThen(stopDrive).andThen(new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5));
+        command = new SequentialCommandGroup(
+          new IntakeIntakeCommand(intake),
+          new DriveForwardForTime(drivetrain, 0.5).withTimeout(3.5),
+          stopDrive,
+          new DrivetrainTurnPIDCommand(drivetrain, 180).withTimeout(3),
+          new LimelightAimCommand(limelight, drivetrain).withTimeout(2),
+          stopDrive,
+          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5),
+          new FlywheelStopCommand(flywheel),
+          new HopperStopCommand(hopper),
+          new IntakeStopCommand(intake)
+        );
         break;
       default:
         trajectory = TrajectoryGenerator.generateTrajectory(

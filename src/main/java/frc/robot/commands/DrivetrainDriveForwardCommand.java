@@ -32,6 +32,7 @@ public class DrivetrainDriveForwardCommand extends CommandBase {
   public void initialize() {
       leftEncoderInit = drivetrain.getLeftEncoderValue()/404.285;
       rightEncoderInit = drivetrain.getRightEncoderValue()/404.285;
+    drivetrain.cheesyDrive(speed, 0, false);
   }
 
   @Override

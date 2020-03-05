@@ -1,25 +1,33 @@
+
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Limelight;
 
-public class HopperStopCommand extends CommandBase {
+public class FlywheelStopCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-  private final Hopper hopper;
+  private final Flywheel flywheel;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public HopperStopCommand(Hopper _hopper) {
-      hopper = _hopper;
+  public FlywheelStopCommand(Flywheel _flywheel) {
+      flywheel = _flywheel;
       // Use addRequirements() here to declare subsystem dependencies.
-      addRequirements(hopper);
+      addRequirements(flywheel);
     }
-      @Override
+  @Override
   public void initialize() {
-    hopper.stop();
+  }
+
+  @Override
+  public void execute(){
+    flywheel.runRPM(0);
   }
 
   @Override
