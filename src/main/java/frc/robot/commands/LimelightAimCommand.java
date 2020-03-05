@@ -27,16 +27,18 @@ public class LimelightAimCommand extends CommandBase {
     }
       @Override
   public void initialize() {
+    limelight.run();
   }
 
   @Override
   public void execute() {
+    limelight.run();
     limelight.autoAim(drivetrain);
   }
 
   @Override
   public boolean isFinished() {
-    if(!(Math.abs(limelight.getOffset()) < 0.5)){
+    if(!(Math.abs(limelight.getOffset()) < 0.2)){
       startOfSettleTimestamp = DriverStation.getInstance().getMatchTime();
     }
     return DriverStation.getInstance().getMatchTime() - settleTime > startOfSettleTimestamp;

@@ -6,10 +6,12 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 // import edu.wpi.first.wpilibj.DriverStation;
@@ -23,6 +25,10 @@ import frc.robot.commands.DrivetrainDriveForwardCommand;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandGroupBase;
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -49,7 +55,8 @@ public class Robot extends TimedRobot {
    HopperStopCommand stopHopper = new HopperStopCommand(hopper);
    ClimberStopCommand stopClimber = new ClimberStopCommand(climber);
    Compressor compressor = new Compressor();
-   Command command;
+   CommandGroupBase command;
+
 
   @Override
   public void robotInit() {
@@ -62,16 +69,20 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().registerSubsystem(flywheel);
     CommandScheduler.getInstance().registerSubsystem(climber);
     CommandScheduler.getInstance().registerSubsystem(hopper);
-    SmartDashboard.putNumber("Flywheel RPM", 0); 
+    //SmartDashboard.putNumber("Flywheel RPM", 0); 
     compressor.setClosedLoopControl(true);
-  }
+    CameraServer.getInstance().startAutomaticCapture();
+    }
 
   @Override
   public void autonomousInit() {
+    limelight.run();
     drivetrain.resetEncoders();
     intake.deploy();
-    command = container.getAutonomousCommand(autonRoutine.DRIVE_OFF_LINE);
+    command = container.getAutonomousCommand(autonRoutine.TEST);
     command.schedule();
+    
+    compressor.setClosedLoopControl(true);
   }
 
   @Override
@@ -85,6 +96,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     intake.deploy();
+    
+    compressor.setClosedLoopControl(true);
   }
 
   @Override
@@ -155,6 +168,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+    
+    compressor.setClosedLoopControl(true);
     intake.reset();
   }
 

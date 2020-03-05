@@ -105,7 +105,7 @@ public class Flywheel extends SubsystemBase {
     @Override
     public void periodic(){
         SmartDashboard.putNumber("RPM Percentage", getRPM()/rpm);
-        SmartDashboard.putBoolean("RPM Ready", Utilities.epsilonEquals(getRPM()/rpm, 1, 0.02) && Limelight.targetFound());
+        SmartDashboard.putBoolean("RPM Ready", Utilities.epsilonEquals(getRPM()/rpm, 1, 0.05) && Limelight.targetFound());
     }
 
 }
