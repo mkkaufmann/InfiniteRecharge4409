@@ -36,7 +36,7 @@ public class FlywheelShootCommand extends CommandBase {
     limelight.run();
     flywheel.shootFromDistance(limelight.getLLdistance());
       if(flywheel.getRPM() > flywheel.getDistanceRPM(limelight.getLLdistance())*.95){
-          hopper.feed(-.4);
+          hopper.feed(-.3);
       }
   }
 

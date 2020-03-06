@@ -112,6 +112,7 @@ public class Robot extends TimedRobot {
         //limelight.stop();
         double yLeft = -controller.getX(Hand.kLeft);
         double yRight = -controller.getY(Hand.kRight);
+        boolean quickTurn = Math.abs(controller.getTriggerAxis(Hand.kLeft)) > 0.5 || Math.abs(yRight) < 0.1;
 
         if(Math.abs(yLeft) < .1)
           yLeft = 0;
@@ -119,7 +120,11 @@ public class Robot extends TimedRobot {
           yRight = 0;
 
         // drivetrain.tankDrive(yLeft, yRight);
-        drivetrain.cheesyDrive(yRight, -yLeft, Math.abs(controller.getTriggerAxis(Hand.kLeft)) > 0.5 || Math.abs(yRight) < 0.1);
+        if(quickTurn){
+          yLeft/=2;
+          yRight/=2;
+        }
+        drivetrain.cheesyDrive(yRight, -yLeft, quickTurn);
     }
     if(partner.getXButton()){
       intake.intake();

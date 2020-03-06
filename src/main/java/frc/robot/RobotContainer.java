@@ -65,13 +65,14 @@ public class RobotContainer {
     config.setKinematics(drivetrain.getKinematics());
 
     Trajectory trajectory;
+
     switch(routine){
       case TEST:
         command = new SequentialCommandGroup(
-          new DriveForwardForTime(drivetrain, -0.5).withTimeout(3),
-          stopDrive,
+          new DriveForwardForTime(drivetrain, -0.25).withTimeout(3),
+          new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
           new LimelightAimCommand(limelight, drivetrain).withTimeout(2),
-          stopDrive,
+          new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
           new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5),
           new FlywheelStopCommand(flywheel),
           new HopperStopCommand(hopper)
@@ -80,15 +81,15 @@ public class RobotContainer {
       case DRIVE_OFF_LINE:
           command = new SequentialCommandGroup(
             new DriveForwardForTime(drivetrain, 0.75).withTimeout(1),
-            stopDrive
-          );
+            new DriveForwardForTime(drivetrain, 0).withTimeout(0.1)
+            );
         break;
       case DRIVE_OFF_LINE_AND_SHOOT:
         command = new SequentialCommandGroup(
           new DriveForwardForTime(drivetrain, -0.5).withTimeout(3),
-          stopDrive,
+          new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
           new LimelightAimCommand(limelight, drivetrain).withTimeout(2),
-          stopDrive,
+          new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
           new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5),
           new FlywheelStopCommand(flywheel),
           new HopperStopCommand(hopper)
@@ -98,16 +99,16 @@ public class RobotContainer {
         command = new SequentialCommandGroup(
           new DriveForwardForTime(drivetrain, 0.75).withTimeout(1),
           new DriveForwardForTime(drivetrain, -0.75).withTimeout(2),
-          stopDrive
+          new DriveForwardForTime(drivetrain, 0).withTimeout(0.1)
         );
         break;
       case PUSH_OFF_LINE_AND_SHOOT:
         command = new SequentialCommandGroup(
           new DriveForwardForTime(drivetrain, 0.5).withTimeout(1),
           new DriveForwardForTime(drivetrain, -0.5).withTimeout(3.5),
-          stopDrive,
+          new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
           new LimelightAimCommand(limelight, drivetrain).withTimeout(2),
-          stopDrive,
+          new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
           new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5),
           new FlywheelStopCommand(flywheel),
           new HopperStopCommand(hopper)
@@ -116,11 +117,11 @@ public class RobotContainer {
       case PICK_UP_TWO_AND_SHOOT:
         command = new SequentialCommandGroup(
           new IntakeIntakeCommand(intake),
-          new DriveForwardForTime(drivetrain, 0.5).withTimeout(3.5),
-          stopDrive,
+          new DriveForwardForTime(drivetrain, 0.25).withTimeout(3.5),
+          new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
           new DrivetrainTurnPIDCommand(drivetrain, 180).withTimeout(3),
           new LimelightAimCommand(limelight, drivetrain).withTimeout(2),
-          stopDrive,
+          new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
           new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5),
           new FlywheelStopCommand(flywheel),
           new HopperStopCommand(hopper),
