@@ -118,6 +118,7 @@ public class RobotContainer {
         command = new SequentialCommandGroup(
           new IntakeIntakeCommand(intake),
           new DriveForwardForTime(drivetrain, 0.25).withTimeout(3.5),
+          new IntakeStopCommand(intake),
           new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
           new DrivetrainTurnPIDCommand(drivetrain, 180).withTimeout(3),
           new LimelightAimCommand(limelight, drivetrain).withTimeout(2),
