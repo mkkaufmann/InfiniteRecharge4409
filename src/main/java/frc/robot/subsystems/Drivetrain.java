@@ -198,7 +198,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getAngle(){
-    return navx.getAngle();
+    return navx.getAngle()%360;
   }
 
   double curYaw;
@@ -217,7 +217,7 @@ public class Drivetrain extends SubsystemBase {
         if(Math.abs(curYaw) < .25)
             totalError = 0;
         double steering = curYaw * kP + diffYaw * kD + totalError * kI;
-        cheesyDrive(0, steering, true);
+        cheesyDrive(0, -steering, true);
   }
 
   @Override

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import frc.robot.commands.LimelightAimCommand;
 import frc.robot.commands.TurnUntilTargetFoundCommand;
 import frc.robot.commands.FlywheelShootCommand;
+import frc.robot.commands.FlywheelSpinUpCommand;
 import frc.robot.commands.FlywheelStopCommand;
 import frc.robot.commands.HopperStopCommand;
 import frc.robot.commands.IntakeIntakeCommand;
@@ -53,7 +54,8 @@ public class RobotContainer {
     DRIVE_OFF_LINE_AND_SHOOT,
     PUSH_TEAM_OFF_LINE,
     PUSH_OFF_LINE_AND_SHOOT,
-    PICK_UP_TWO_AND_SHOOT
+    PICK_UP_TWO_AND_SHOOT,
+    EIGHT_BALL
   }
 
   Command stopDrive = new DriveForwardForTime(drivetrain, 0);
@@ -70,13 +72,7 @@ public class RobotContainer {
     switch(routine){
       case TEST:
         command = new SequentialCommandGroup(
-          new DriveForwardForTime(drivetrain, -0.25).withTimeout(3),
-          new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
-          new LimelightAimCommand(limelight, drivetrain).withTimeout(2),
-          new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
-          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5),
-          new FlywheelStopCommand(flywheel),
-          new HopperStopCommand(hopper)
+          new DrivetrainTurnPIDCommand(drivetrain, 180)
         );
         break;
       case DRIVE_OFF_LINE:
@@ -115,19 +111,47 @@ public class RobotContainer {
           new HopperStopCommand(hopper)
         );
         break;
-      case PICK_UP_TWO_AND_SHOOT:
+        case PICK_UP_TWO_AND_SHOOT:
         command = new SequentialCommandGroup(
           new IntakeIntakeCommand(intake),
-          new DriveForwardForTime(drivetrain, 0.25).withTimeout(3.5),
-          new IntakeStopCommand(intake),
+          new DriveForwardForTime(drivetrain, 0.5).withTimeout(2.5),
           new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
           new TurnUntilTargetFoundCommand(drivetrain, limelight).withTimeout(3),
-          new LimelightAimCommand(limelight, drivetrain).withTimeout(2),
+          new LimelightAimCommand(limelight, drivetrain).withTimeout(1.5),
           new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
-          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5),
+          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(1),
+          new IntakeStopCommand(intake),
+          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(6),
           new FlywheelStopCommand(flywheel),
           new HopperStopCommand(hopper),
           new IntakeStopCommand(intake)
+        );
+        break;
+        case EIGHT_BALL:
+        command = new SequentialCommandGroup(
+          new IntakeIntakeCommand(intake),
+          new DriveForwardForTime(drivetrain, 1).withTimeout(1.25),
+          new DriveForwardForTime(drivetrain, 0).withTimeout(0.01),
+          new FlywheelSpinUpCommand(flywheel, 300),
+          new DrivetrainTurnPIDCommand(drivetrain, 180).withTimeout(1),
+          new LimelightAimCommand(limelight, drivetrain).withTimeout(1.5),
+          new DriveForwardForTime(drivetrain, 0).withTimeout(0.01),
+          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(1),
+          new IntakeStopCommand(intake),
+          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(6),
+          new FlywheelStopCommand(flywheel),
+          new HopperStopCommand(hopper),
+          new DrivetrainTurnPIDCommand(drivetrain, 0),
+          new IntakeIntakeCommand(intake),
+          new DriveForwardForTime(drivetrain, .5).withTimeout(1),
+          new FlywheelSpinUpCommand(flywheel, 300),
+          new DriveForwardForTime(drivetrain, -.5).withTimeout(1),
+          new DrivetrainTurnPIDCommand(drivetrain, 180),
+          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(1),
+          new IntakeStopCommand(intake),
+          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(4),
+          new FlywheelStopCommand(flywheel),
+          new HopperStopCommand(hopper)
         );
         break;
       default:

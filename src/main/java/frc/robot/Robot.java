@@ -79,7 +79,7 @@ public class Robot extends TimedRobot {
     limelight.run();
     drivetrain.resetEncoders();
     intake.deploy();
-    command = container.getAutonomousCommand(autonRoutine.PICK_UP_TWO_AND_SHOOT);
+    command = container.getAutonomousCommand(autonRoutine.TEST);
     command.schedule();
     
     compressor.setClosedLoopControl(true);

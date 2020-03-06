@@ -6,42 +6,33 @@ import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Limelight;
 
-public class FlywheelShootCommand extends CommandBase {
+public class FlywheelSpinUpCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final Flywheel flywheel;
-  private final Hopper hopper;
-  private final Limelight limelight;
+  private final double inches;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public FlywheelShootCommand(Flywheel _flywheel, Hopper _hopper, Limelight _limelight) {
+  public FlywheelSpinUpCommand(Flywheel _flywheel, double _inches) {
       flywheel = _flywheel;
-      limelight = _limelight;
-      hopper = _hopper;
+      inches = _inches;
       // Use addRequirements() here to declare subsystem dependencies.
       addRequirements(flywheel);
-      addRequirements(hopper);
-      addRequirements(limelight);
     }
   @Override
   public void initialize() {
-    limelight.run();
   }
 
   @Override
   public void execute(){
-    limelight.run();
-    flywheel.shootFromDistance(limelight.getLLdistance());
-      if(flywheel.getRPM() > flywheel.getDistanceRPM(limelight.getLLdistance())*.95 && flywheel.getRPM() < flywheel.getDistanceRPM(limelight.getLLdistance())*1.05){
-          hopper.feed(-.4);
-      }
+    flywheel.shootFromDistance(inches);
   }
-
+  
   @Override
   public boolean isFinished() {
-    return false;
-  }
+    return true;
+}
 }

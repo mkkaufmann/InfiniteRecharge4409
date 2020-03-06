@@ -26,7 +26,12 @@ public class DrivetrainTurnPIDCommand extends CommandBase{
 
   @Override
   public boolean isFinished(){
-    return Utilities.epsilonEquals(angle, drivetrain.getAngle()%360, 0.5);
+    if(Utilities.epsilonEquals(angle, drivetrain.getAngle()%360, 0.5)){
+      drivetrain.cheesyDrive(0, 0, false);
+      return true;
+
+    }
+    return false;
   }
   
 }
