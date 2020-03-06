@@ -121,8 +121,7 @@ public class Robot extends TimedRobot {
 
         // drivetrain.tankDrive(yLeft, yRight);
         if(quickTurn){
-          yLeft/=2;
-          yRight/=2;
+          yLeft*=0.65;
         }
         drivetrain.cheesyDrive(yRight, -yLeft, quickTurn);
     }

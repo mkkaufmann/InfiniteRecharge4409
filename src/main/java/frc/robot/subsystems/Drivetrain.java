@@ -205,7 +205,7 @@ public class Drivetrain extends SubsystemBase {
   double prevYaw;
   double diffYaw;
   double totalError;
-  static final double kP = -1.5/25.0;
+  static final double kP = -1.5/180.0;
   static final double kI = -0.0;
   static final double kD = -0;
 

@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import frc.robot.commands.LimelightAimCommand;
+import frc.robot.commands.TurnUntilTargetFoundCommand;
 import frc.robot.commands.FlywheelShootCommand;
 import frc.robot.commands.FlywheelStopCommand;
 import frc.robot.commands.HopperStopCommand;
@@ -120,7 +121,7 @@ public class RobotContainer {
           new DriveForwardForTime(drivetrain, 0.25).withTimeout(3.5),
           new IntakeStopCommand(intake),
           new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
-          new DrivetrainTurnPIDCommand(drivetrain, 180).withTimeout(3),
+          new TurnUntilTargetFoundCommand(drivetrain, limelight).withTimeout(3),
           new LimelightAimCommand(limelight, drivetrain).withTimeout(2),
           new DriveForwardForTime(drivetrain, 0).withTimeout(0.1),
           new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(5),

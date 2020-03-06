@@ -2,16 +2,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.Utilities;
+import frc.robot.subsystems.Limelight;
 
-public class DrivetrainTurnPIDCommand extends CommandBase{
+public class TurnUntilTargetFoundCommand extends CommandBase{
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final Drivetrain drivetrain;
-  private final double angle;
+  private final Limelight limelight;
   
-  public DrivetrainTurnPIDCommand(Drivetrain _drivetrain, double _angle){
+  public TurnUntilTargetFoundCommand(Drivetrain _drivetrain, Limelight _limelight){
     drivetrain = _drivetrain;
-    angle = _angle;
+    limelight = _limelight;
+    addRequirements(drivetrain, limelight); 
   }
 
   @Override
@@ -21,12 +22,12 @@ public class DrivetrainTurnPIDCommand extends CommandBase{
 
   @Override
   public void execute(){
-    drivetrain.turnAnglePID(angle);
+    drivetrain.cheesyDrive(0, -0.5, true);
   }
 
   @Override
   public boolean isFinished(){
-    return Utilities.epsilonEquals(angle, drivetrain.getAngle()%360, 0.5);
+    return Limelight.targetFound();
   }
   
 }
