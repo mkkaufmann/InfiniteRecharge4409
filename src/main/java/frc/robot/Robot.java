@@ -56,6 +56,7 @@ public class Robot extends TimedRobot {
    ClimberStopCommand stopClimber = new ClimberStopCommand(climber);
    Compressor compressor = new Compressor();
    CommandGroupBase command;
+   int inverse = 1;
 
 
   @Override
@@ -79,9 +80,8 @@ public class Robot extends TimedRobot {
     limelight.run();
     drivetrain.resetEncoders();
     intake.deploy();
-    command = container.getAutonomousCommand(autonRoutine.TEST);
+    command = container.getAutonomousCommand(autonRoutine.DRIVE_OFF_LINE_AND_SHOOT);
     command.schedule();
-    
     compressor.setClosedLoopControl(true);
   }
 
@@ -96,7 +96,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     intake.deploy();
-    
     compressor.setClosedLoopControl(true);
   }
 
@@ -110,20 +109,20 @@ public class Robot extends TimedRobot {
       limelight.autoAim(drivetrain);
     }else{
         //limelight.stop();
-        double yLeft = -controller.getX(Hand.kLeft);
-        double yRight = -controller.getY(Hand.kRight);
+        double xLeft = -controller.getX(Hand.kLeft)*inverse;
+        double yRight = -controller.getY(Hand.kRight)*inverse;
         boolean quickTurn = Math.abs(controller.getTriggerAxis(Hand.kLeft)) > 0.5 || Math.abs(yRight) < 0.1;
 
-        if(Math.abs(yLeft) < .1)
-          yLeft = 0;
+        if(Math.abs(xLeft) < .15)
+          xLeft = 0;
         if(Math.abs(yRight) < .1)
           yRight = 0;
 
         // drivetrain.tankDrive(yLeft, yRight);
         if(quickTurn){
-          yLeft*=0.65;
+          xLeft*=0.65;
         }
-        drivetrain.cheesyDrive(yRight, -yLeft, quickTurn);
+        drivetrain.cheesyDrive(yRight, -xLeft, quickTurn);
     }
     if(partner.getXButton()){
       intake.intake();
@@ -142,6 +141,9 @@ public class Robot extends TimedRobot {
     }
     else{
       climber.stop();
+    }
+    if(controller.getAButton()){
+      inverse*=-1;
     }
     boolean runFlywheel = Math.abs(partner.getTriggerAxis(Hand.kLeft))>0.5;
     if(runFlywheel){

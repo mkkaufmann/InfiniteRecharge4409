@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase{
 
-    static final double kP = -0.02;
+    static final double kP = -0.022;
     static final double kI = -0.0;
     static final double kD = -0;
     static final double goalHeightMid = 89;
@@ -55,19 +55,22 @@ public class Limelight extends SubsystemBase{
     }
 
     public double getLLdistance(){
-        System.out.println("Vertical offset: " + ty.getDouble(0.0));
+        System.out.println("Horizontal offset: " + tx.getDouble(0.0));
         return heightDiff/(Math.tan(Math.toRadians(ty.getDouble(0.0)))+mountAngle);
     }
 
     public void autoAim(Drivetrain drivetrain){
         run();
         prevYaw = curYaw;
-        curYaw = tx.getDouble(2.0) - 2;
+        curYaw = tx.getDouble(0.0) - 3.5;
         diffYaw = curYaw - prevYaw;
         totalError += diffYaw;
         if(Math.abs(curYaw) < .25)
             totalError = 0;
         double steering = curYaw * kP + diffYaw * kD + totalError * kI;
+        if(curYaw == -3.5){
+            steering = 0; 
+        }
         drivetrain.cheesyDrive(0, -steering, true);
         
     }
