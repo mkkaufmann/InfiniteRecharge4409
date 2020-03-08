@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
     limelight.run();
     drivetrain.resetEncoders();
     intake.deploy();
-    command = container.getAutonomousCommand(autonRoutine.DRIVE_OFF_LINE_AND_SHOOT);
+    command = container.getAutonomousCommand(autonRoutine.PICK_UP_TWO_AND_SHOOT);
     command.schedule();
     compressor.setClosedLoopControl(true);
   }
@@ -159,7 +159,7 @@ public class Robot extends TimedRobot {
       drivetrain.shift(!drivetrain.getHighGear());
     }
     if(Math.abs(partner.getTriggerAxis(Hand.kRight)) > 0.5){
-      hopper.feed(-0.4);
+      hopper.feed(-0.25);
     }else if(partner.getAButton()){
       hopper.feed(0.4);
     }else{

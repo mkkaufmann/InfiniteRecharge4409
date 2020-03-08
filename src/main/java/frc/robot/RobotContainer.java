@@ -75,7 +75,7 @@ public class RobotContainer {
     switch(routine){
       case TEST:
         command = new SequentialCommandGroup(
-          new TurnUntilTargetFoundCommand(drivetrain, limelight)
+          new DrivetrainTurnPIDCommand(drivetrain, 180)
         );
         break;
       case ENGINERDS_FEED:
@@ -130,13 +130,11 @@ public class RobotContainer {
         case PICK_UP_TWO_AND_SHOOT:
         command = new SequentialCommandGroup(
           new IntakeIntakeCommand(intake),
-          new DriveForwardForTime(drivetrain, -0.75).withTimeout(0.2),
-          new DriveForwardForTime(drivetrain, 0.75).withTimeout(0.2),
           new FlywheelSpinUpCommand(flywheel, 300),
-          new DriveForwardForTime(drivetrain, 0.5).withTimeout(2.75),
+          new DriveForwardForTime(drivetrain, 0.5).withTimeout(2.9),
           new DriveForwardForTime(drivetrain, 0).withTimeout(0.01),
-          new TurnUntilTargetFoundCommand(drivetrain, limelight).withTimeout(3),
-          new LimelightAimCommand(limelight, drivetrain).withTimeout(1.5),
+          new DrivetrainTurnPIDCommand(drivetrain, 170).withTimeout(1.45),
+          new LimelightAimCommand(limelight, drivetrain).withTimeout(2.5),
           new DriveForwardForTime(drivetrain, 0).withTimeout(0.01),
           new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(1),
           new IntakeStopCommand(intake),
@@ -149,9 +147,7 @@ public class RobotContainer {
         case EIGHT_BALL:
         command = new SequentialCommandGroup(
           new IntakeIntakeCommand(intake),
-          new DriveForwardForTime(drivetrain, -0.75).withTimeout(0.2),
-          new DriveForwardForTime(drivetrain, 0.75).withTimeout(0.2),
-          new DriveForwardForTime(drivetrain, 1).withTimeout(1.25),
+          new DriveForwardForTime(drivetrain, 1).withTimeout(1.45),
           new DriveForwardForTime(drivetrain, 0).withTimeout(0.01),
           new FlywheelSpinUpCommand(flywheel, 300),
           new DrivetrainTurnPIDCommand(drivetrain, 180).withTimeout(1),
@@ -164,10 +160,11 @@ public class RobotContainer {
           new HopperStopCommand(hopper),
           new DrivetrainTurnPIDCommand(drivetrain, 0),
           new IntakeIntakeCommand(intake),
-          new DriveForwardForTime(drivetrain, .5).withTimeout(1),
+          new DriveForwardForTime(drivetrain, 1).withTimeout(1),
           new FlywheelSpinUpCommand(flywheel, 300),
-          new DriveForwardForTime(drivetrain, -.5).withTimeout(1),
+          new DriveForwardForTime(drivetrain, -1).withTimeout(1),
           new DrivetrainTurnPIDCommand(drivetrain, 180),
+          new LimelightAimCommand(limelight, drivetrain).withTimeout(1),
           new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(1),
           new IntakeStopCommand(intake),
           new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(4),
@@ -187,14 +184,15 @@ public class RobotContainer {
           new DriveForwardForTime(drivetrain, 0).withTimeout(0.01),
           new IntakeIntakeCommand(intake),
           new DriveForwardForTime(drivetrain, 1).withTimeout(2),
-          new FlywheelSpinUpCommand(flywheel, 200),
+          new FlywheelSpinUpCommand(flywheel, 300),
           new DriveForwardForTime(drivetrain, -1).withTimeout(0.75),
           new DriveForwardForTime(drivetrain, 0).withTimeout(0.01),
           new DrivetrainTurnPIDCommand(drivetrain, 0).withTimeout(2),
           new DriveForwardForTime(drivetrain, 0).withTimeout(0.01),
+          new LimelightAimCommand(limelight, drivetrain).withTimeout(1),
           new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(1),
           new IntakeStopCommand(intake),
-          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(6),
+          new FlywheelShootCommand(flywheel, hopper, limelight).withTimeout(7),
           new FlywheelStopCommand(flywheel),
           new HopperStopCommand(hopper)
         );

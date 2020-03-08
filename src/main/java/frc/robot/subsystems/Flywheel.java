@@ -25,7 +25,7 @@ public class Flywheel extends SubsystemBase {
     static final double MAX_PROJECTILE_VELOCITY_INCHES_PER_SECOND = MAX_FLYWEEL_VELOCITY_INCHES_PER_SECOND * SPEED_TRANSFER_TO_BALL;
     static final double VELOCITY_ERROR = 0.02;
     static final double HEIGHT_OF_TARGET_INCHES = 98.25;
-    static final double POOPY_SHOOT_RPM = 1000;
+    static final double POOPY_SHOOT_RPM = 500;
     double rpm = 0;
     
 

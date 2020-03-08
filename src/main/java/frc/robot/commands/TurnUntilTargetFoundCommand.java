@@ -22,7 +22,8 @@ public class TurnUntilTargetFoundCommand extends CommandBase{
 
   @Override
   public void execute(){
-    drivetrain.cheesyDrive(0, 0.5, true);
+    limelight.run();
+    drivetrain.cheesyDrive(0, 0.4, true);
   }
 
   @Override
